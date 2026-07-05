@@ -1,0 +1,123 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`golden snapshot: example-react-navigation > matches the golden scan-result snapshot 1`] = `
+{
+  "diagnostics": [],
+  "pathlessScreens": [
+    "Settings/DevMenu",
+  ],
+  "prefixes": [
+    "examplereactnavigation://",
+    "https://deeplink-devtools.example.com",
+  ],
+  "table": {
+    "routes": [
+      {
+        "exact": true,
+        "name": "HomeTabs",
+        "params": [],
+        "pattern": "/",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+      {
+        "exact": true,
+        "name": "HomeTabs/Feed",
+        "params": [],
+        "pattern": "/feed",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+      {
+        "exact": true,
+        "name": "HomeTabs/Feed/FeedList",
+        "params": [],
+        "pattern": "/feed",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+      {
+        "exact": true,
+        "name": "HomeTabs/Feed/Article",
+        "params": [
+          {
+            "kind": "path",
+            "name": "slug",
+            "optional": false,
+            "tsType": "string",
+          },
+          {
+            "kind": "path",
+            "name": "commentId",
+            "optional": true,
+            "tsType": "unknown (custom parse)",
+          },
+        ],
+        "pattern": "/feed/article/:slug/:commentId?",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+      {
+        "exact": true,
+        "name": "HomeTabs/Feed/Search",
+        "params": [],
+        "pattern": "/search",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+      {
+        "exact": true,
+        "name": "HomeTabs/Profile",
+        "params": [
+          {
+            "kind": "path",
+            "name": "id",
+            "optional": false,
+            "tsType": "unknown (custom parse)",
+          },
+        ],
+        "pattern": "/user/:id",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+      {
+        "exact": true,
+        "name": "HomeTabs/Profile",
+        "params": [
+          {
+            "kind": "path",
+            "name": "id",
+            "optional": false,
+            "tsType": "unknown (custom parse)",
+          },
+        ],
+        "pattern": "/u/:id",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+      {
+        "exact": true,
+        "name": "Promo",
+        "params": [
+          {
+            "kind": "path",
+            "name": "code",
+            "optional": false,
+            "tsType": "string",
+          },
+        ],
+        "pattern": "/promo/:code(SUMMER|WINTER)",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+      {
+        "exact": true,
+        "name": "Settings/Notifications",
+        "params": [],
+        "pattern": "/settings/notifications",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+      {
+        "exact": false,
+        "name": "NotFound",
+        "params": [],
+        "pattern": "/*",
+        "sourceFile": "src/navigation/linking.ts",
+      },
+    ],
+    "sourceType": "react-navigation",
+  },
+}
+`;

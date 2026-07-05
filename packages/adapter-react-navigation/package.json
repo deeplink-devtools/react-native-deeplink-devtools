@@ -32,7 +32,8 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@deeplink-devtools/core": "^0.0.0"
+    "@deeplink-devtools/core": "^0.0.0",
+    "jiti": "^2.7.0"
   },
   "scripts": {
     "build": "tsup",
