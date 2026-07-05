@@ -6,7 +6,8 @@
     "node": ">=20"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "example-expo-router"
   ],
   "scripts": {
     "build": "yarn workspaces foreach -A --topological-dev run build",
