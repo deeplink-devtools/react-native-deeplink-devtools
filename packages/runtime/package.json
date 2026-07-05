@@ -1,0 +1,41 @@
+{
+  "name": "@deeplink-devtools/runtime",
+  "version": "0.0.0",
+  "description": "Tiny in-app deep-link reporter for React Native development builds. Guaranteed no-op in production.",
+  "keywords": [
+    "react-native",
+    "deep-link",
+    "devtools"
+  ],
+  "license": "MIT",
+  "author": "Amrith Vengalath <amrith@vengalath.com>",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

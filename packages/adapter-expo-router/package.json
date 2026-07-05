@@ -1,0 +1,45 @@
+{
+  "name": "@deeplink-devtools/adapter-expo-router",
+  "version": "0.0.0",
+  "description": "Builds a normalized deep-link route table from an Expo Router app directory.",
+  "keywords": [
+    "react-native",
+    "expo-router",
+    "deep-link",
+    "routing"
+  ],
+  "license": "MIT",
+  "author": "Amrith Vengalath <amrith@vengalath.com>",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@deeplink-devtools/core": "^0.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

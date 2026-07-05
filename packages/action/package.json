@@ -1,0 +1,8 @@
+{
+  "name": "@deeplink-devtools/action",
+  "version": "0.0.0",
+  "private": true,
+  "description": "GitHub Action wrapping rndl validate and rndl routes. Placeholder until the CLI ships.",
+  "license": "MIT",
+  "author": "Amrith Vengalath <amrith@vengalath.com>"
+}

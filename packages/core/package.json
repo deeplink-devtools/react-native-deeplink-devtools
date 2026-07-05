@@ -1,0 +1,43 @@
+{
+  "name": "@deeplink-devtools/core",
+  "version": "0.0.0",
+  "description": "Route-table model, matchers, and validators for React Native deep-link tooling. Pure TypeScript, no React Native dependency.",
+  "keywords": [
+    "react-native",
+    "deep-link",
+    "universal-links",
+    "app-links",
+    "routing"
+  ],
+  "license": "MIT",
+  "author": "Amrith Vengalath <amrith@vengalath.com>",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

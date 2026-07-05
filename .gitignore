@@ -1,0 +1,37 @@
+# dependencies
+node_modules/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+
+# builds
+dist/
+lib/
+*.tsbuildinfo
+.expo/
+android/build/
+ios/build/
+ios/Pods/
+
+# test / coverage
+coverage/
+
+# env & local
+.env*
+!.env.example
+*.local
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# logs
+*.log
+npm-debug.log*
+yarn-error.log*

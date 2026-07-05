@@ -1,0 +1,31 @@
+{
+  "name": "react-native-deeplink-devtools",
+  "version": "0.0.0",
+  "description": "The rndl CLI for React Native deep links: inspect route tables, validate universal links and Android App Links, open links on simulators and devices.",
+  "keywords": [
+    "react-native",
+    "deep-link",
+    "universal-links",
+    "app-links",
+    "aasa",
+    "assetlinks",
+    "cli"
+  ],
+  "license": "MIT",
+  "author": "Amrith Vengalath <amrith@vengalath.com>",
+  "type": "module",
+  "bin": {
+    "rndl": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}

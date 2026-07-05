@@ -1,0 +1,31 @@
+{
+  "name": "deeplink-devtools-monorepo",
+  "private": true,
+  "packageManager": "yarn@4.17.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "yarn workspaces foreach -A --topological-dev run build",
+    "typecheck": "yarn workspaces foreach -A run typecheck",
+    "test": "yarn workspaces foreach -A run test",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "publish:dry": "yarn workspaces foreach -A --no-private exec npm publish --dry-run"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.1.0",
+    "eslint": "^10.6.0",
+    "prettier": "^3.9.4",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.62.1",
+    "vitest": "^4.1.9"
+  }
+}
