@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "example-react-navigation",
+    "slug": "example-react-navigation",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "examplereactnavigation",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "predictiveBackGestureEnabled": false
+    }
+  }
+}
