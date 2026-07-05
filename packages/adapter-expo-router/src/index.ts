@@ -1,7 +1,10 @@
 /**
- * Normalized route-table types this adapter produces.
+ * Expo Router adapter: walks an `app/` (or `src/app/`) directory and produces
+ * the normalized {@link RouteTable} used by every rndl command.
  *
- * The adapter itself — walking an Expo Router `app/` directory and emitting a
- * {@link RouteTable} — ships in an upcoming release.
+ * The scan is static — file names only, no user code execution — and verified
+ * against expo-router 57 (Expo SDK 57) conventions.
  */
-export type { Param, ParamKind, Route, RouteTable } from '@deeplink-devtools/core';
+export { buildRouteTable } from './scan.js';
+export type { ExpoRouterLayout, ExpoRouterScanResult } from './scan.js';
+export type { Diagnostic, Param, ParamKind, Route, RouteTable } from '@deeplink-devtools/core';

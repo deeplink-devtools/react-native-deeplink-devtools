@@ -1,0 +1,148 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`golden snapshot: example-expo-router > matches the golden RouteTable snapshot 1`] = `
+{
+  "apiRoutes": [
+    "api/users+api.ts",
+  ],
+  "diagnostics": [],
+  "layouts": [
+    {
+      "anchor": "home",
+      "sourceFile": "(tabs)/_layout.tsx",
+    },
+    {
+      "anchor": "index",
+      "sourceFile": "(tabs)/settings/_layout.tsx",
+    },
+    {
+      "anchor": undefined,
+      "sourceFile": "_layout.tsx",
+    },
+  ],
+  "table": {
+    "routes": [
+      {
+        "exact": true,
+        "name": "(marketing,shop)/promo",
+        "params": [],
+        "pattern": "/promo",
+        "sourceFile": "(marketing,shop)/promo.tsx",
+      },
+      {
+        "exact": true,
+        "name": "(tabs)/home",
+        "params": [],
+        "pattern": "/home",
+        "sourceFile": "(tabs)/home.tsx",
+      },
+      {
+        "exact": true,
+        "name": "(tabs)/settings/index",
+        "params": [],
+        "pattern": "/settings",
+        "sourceFile": "(tabs)/settings/index.tsx",
+      },
+      {
+        "exact": true,
+        "name": "(tabs)/settings/notifications",
+        "params": [],
+        "pattern": "/settings/notifications",
+        "sourceFile": "(tabs)/settings/notifications.tsx",
+      },
+      {
+        "exact": false,
+        "name": "+not-found",
+        "params": [
+          {
+            "kind": "catch-all",
+            "name": "not-found",
+            "optional": true,
+            "tsType": "string[]",
+          },
+        ],
+        "pattern": "/*not-found",
+        "sourceFile": "+not-found.tsx",
+      },
+      {
+        "exact": true,
+        "name": "about",
+        "params": [],
+        "pattern": "/about",
+        "sourceFile": "about.tsx",
+      },
+      {
+        "exact": true,
+        "name": "contact",
+        "params": [],
+        "pattern": "/contact",
+        "sourceFile": "contact.tsx",
+      },
+      {
+        "exact": true,
+        "name": "docs/[page]",
+        "params": [
+          {
+            "kind": "path",
+            "name": "page",
+            "optional": false,
+            "tsType": "string",
+          },
+        ],
+        "pattern": "/docs/:page",
+        "sourceFile": "docs/[page].tsx",
+      },
+      {
+        "exact": true,
+        "name": "index",
+        "params": [],
+        "pattern": "/",
+        "sourceFile": "index.tsx",
+      },
+      {
+        "exact": false,
+        "name": "posts/[...slug]",
+        "params": [
+          {
+            "kind": "catch-all",
+            "name": "slug",
+            "optional": false,
+            "tsType": "string[]",
+          },
+        ],
+        "pattern": "/posts/*slug",
+        "sourceFile": "posts/[...slug].tsx",
+      },
+      {
+        "exact": true,
+        "name": "users/[id]/index",
+        "params": [
+          {
+            "kind": "path",
+            "name": "id",
+            "optional": false,
+            "tsType": "string",
+          },
+        ],
+        "pattern": "/users/:id",
+        "sourceFile": "users/[id]/index.tsx",
+      },
+      {
+        "exact": true,
+        "name": "users/[id]/posts",
+        "params": [
+          {
+            "kind": "path",
+            "name": "id",
+            "optional": false,
+            "tsType": "string",
+          },
+        ],
+        "pattern": "/users/:id/posts",
+        "sourceFile": "users/[id]/posts.tsx",
+      },
+    ],
+    "sourceType": "expo-router",
+  },
+}
+`;
