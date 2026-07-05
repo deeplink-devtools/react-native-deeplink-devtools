@@ -7237,7 +7237,7 @@ __metadata:
     "@deeplink-devtools/core": "npm:^0.0.0"
     commander: "npm:^15.0.0"
   bin:
-    rndl: ./dist/cli.js
+    rndl: dist/cli.js
   languageName: unknown
   linkType: soft
 
