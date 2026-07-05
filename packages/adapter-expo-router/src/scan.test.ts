@@ -144,9 +144,7 @@ describe('buildRouteTable', () => {
   });
 
   it('warns when two files resolve to the same URL pattern', () => {
-    const { table, diagnostics } = buildRouteTable(
-      fixture(['(a)/pricing.tsx', '(b)/pricing.tsx']),
-    );
+    const { table, diagnostics } = buildRouteTable(fixture(['(a)/pricing.tsx', '(b)/pricing.tsx']));
     expect(table.routes).toHaveLength(2);
     expect(diagnostics.map((d) => d.code)).toEqual(['DUPLICATE_PATTERN']);
   });

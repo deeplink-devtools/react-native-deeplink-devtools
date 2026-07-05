@@ -15,13 +15,18 @@
   "author": "Amrith Vengalath <amrith@vengalath.com>",
   "type": "module",
   "bin": {
-    "rndl": "./dist/cli.js"
+    "rndl": "dist/cli.js"
   },
   "files": [
     "dist"
   ],
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "@deeplink-devtools/adapter-expo-router": "^0.0.0",
+    "@deeplink-devtools/core": "^0.0.0",
+    "commander": "^15.0.0"
   },
   "scripts": {
     "build": "tsup",
