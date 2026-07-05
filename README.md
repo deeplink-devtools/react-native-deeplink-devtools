@@ -7,6 +7,24 @@ generate TypeScript types for your deep links.
 > **Status:** under active development. Nothing is published to npm yet — watch the repository
 > for the first release.
 
+## Usage (early preview)
+
+From an Expo Router project (until the first npm release, via a clone of this repo):
+
+```sh
+rndl routes            # aligned table of every deep-linkable route
+rndl routes --json     # full scan result: routes, API routes, layouts, diagnostics
+rndl routes --app-dir src/app
+```
+
+`rndl routes` auto-detects `app/` then `src/app/`, understands every Expo Router file
+convention (dynamic segments, catch-alls, groups incl. array syntax, platform-specific
+variants, `+not-found`, `+api`, `+html`, `+native-intent`, `+middleware`), and warns —
+never crashes — on conventions it doesn't recognize.
+
+The CLI keeps runtime dependencies to a minimum: [commander](https://github.com/tj/commander.js)
+(argument parsing, zero transitive dependencies) plus this repo's own packages.
+
 ## Packages
 
 | Package                                       | Purpose                                                       |
