@@ -1,5 +1,4 @@
-import type { Diagnostic, Param, Route } from '@deeplink-devtools/core';
-import type { ExpoRouterScanResult } from '@deeplink-devtools/adapter-expo-router';
+import type { Diagnostic, Param, Route, RouteTable } from '@deeplink-devtools/core';
 
 /** Control Sequence Introducer (ESC + `[`), the prefix of every ANSI style code. */
 const CSI = `${String.fromCharCode(27)}[`;
@@ -55,11 +54,17 @@ function formatPattern(pattern: string, color: boolean): string {
 }
 
 /**
- * Render the scan result as an aligned plain-text table for terminals.
- * Pure function of its inputs — no I/O — so it is directly unit-testable.
+ * Render a route table as an aligned plain-text table for terminals, ending
+ * in a summary line: route count, source type, then the adapter-specific
+ * `summaryExtras` (e.g. API-route or prefix counts). Pure function of its
+ * inputs — no I/O — so it is directly unit-testable.
  */
-export function renderRoutesTable(result: ExpoRouterScanResult, color: boolean): string {
-  const { routes } = result.table;
+export function renderRoutesTable(
+  table: RouteTable,
+  summaryExtras: string[],
+  color: boolean,
+): string {
+  const { routes } = table;
   const header = ['PATTERN', 'PARAMS', 'SOURCE'];
   const rows: string[][] = routes.map((route: Route) => [
     route.pattern,
@@ -85,14 +90,9 @@ export function renderRoutesTable(result: ExpoRouterScanResult, color: boolean):
   }
 
   const summary: string[] = [
-    `${routes.length} route${routes.length === 1 ? '' : 's'} (expo-router)`,
+    `${routes.length} route${routes.length === 1 ? '' : 's'} (${table.sourceType})`,
+    ...summaryExtras,
   ];
-  if (result.apiRoutes.length > 0) {
-    summary.push(`${result.apiRoutes.length} API route${result.apiRoutes.length === 1 ? '' : 's'}`);
-  }
-  if (result.layouts.length > 0) {
-    summary.push(`${result.layouts.length} layout${result.layouts.length === 1 ? '' : 's'}`);
-  }
   lines.push('');
   lines.push(paint(color, 'dim', summary.join(', ')));
 

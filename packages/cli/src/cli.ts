@@ -17,4 +17,4 @@ const program = new Command()
 
 program.addCommand(routesCommand());
 
-program.parse();
+await program.parseAsync();

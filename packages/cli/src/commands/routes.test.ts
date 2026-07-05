@@ -3,10 +3,18 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
-import { resolveAppDir, runRoutes } from './routes.js';
+import { resolveAppDir, runRoutes, runRoutesConfig } from './routes.js';
 
 const EXAMPLE_APP_DIR = fileURLToPath(
   new URL('../../../../example-expo-router/src/app', import.meta.url),
+);
+
+const RNAV_EXAMPLE_DIR = fileURLToPath(
+  new URL('../../../../example-react-navigation', import.meta.url),
+);
+
+const RNAV_FIXTURES_DIR = fileURLToPath(
+  new URL('../../../adapter-react-navigation/src/__fixtures__', import.meta.url),
 );
 
 let tempDir: string | undefined;
@@ -75,5 +83,47 @@ describe('runRoutes', () => {
   it('colors patterns and diagnostics only when asked', () => {
     const colored = runRoutes(EXAMPLE_APP_DIR, { json: false, color: true });
     expect(colored.stdout).toContain(String.fromCharCode(27));
+  });
+});
+
+describe('runRoutesConfig', () => {
+  it('prints a table for the example React Navigation linking config', async () => {
+    const output = await runRoutesConfig('src/navigation/linking.ts#linking', RNAV_EXAMPLE_DIR, {
+      json: false,
+      color: false,
+    });
+    expect(output.exitCode).toBe(0);
+    expect(output.stderr).toBe('');
+    expect(output.stdout).toContain('/feed/article/:slug/:commentId?');
+    expect(output.stdout).toContain('/u/:id');
+    expect(output.stdout).toContain('10 routes (react-navigation), 2 prefixes, 1 pathless screen');
+    expect(output.stdout).not.toContain(String.fromCharCode(27));
+  });
+
+  it('emits the full scan result as stable JSON', async () => {
+    const output = await runRoutesConfig('src/navigation/linking.ts', RNAV_EXAMPLE_DIR, {
+      json: true,
+      color: false,
+    });
+    expect(output.exitCode).toBe(0);
+    const parsed = JSON.parse(output.stdout) as {
+      table: { sourceType: string; routes: unknown[] };
+      prefixes: string[];
+    };
+    expect(parsed.table.sourceType).toBe('react-navigation');
+    expect(parsed.table.routes).toHaveLength(10);
+    expect(parsed.prefixes).toHaveLength(2);
+    expect(parsed).toMatchSnapshot();
+  });
+
+  it('exits 1 with the isolated-module guidance when the module crashes on import', async () => {
+    const output = await runRoutesConfig('side-effects/linking.ts', RNAV_FIXTURES_DIR, {
+      json: false,
+      color: false,
+    });
+    expect(output.exitCode).toBe(1);
+    expect(output.stdout).toBe('');
+    expect(output.stderr).toContain('CONFIG_LOAD_FAILED');
+    expect(output.stderr).toContain('isolated module');
   });
 });

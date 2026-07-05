@@ -1,7 +1,9 @@
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
+import type { Diagnostic, RouteTable } from '@deeplink-devtools/core';
 import { buildRouteTable } from '@deeplink-devtools/adapter-expo-router';
+import { scanLinkingModule } from '@deeplink-devtools/adapter-react-navigation';
 import { renderDiagnostics, renderRoutesTable, shouldColor } from '../render.js';
 
 /**
@@ -29,9 +31,28 @@ export interface RoutesOutput {
   exitCode: number;
 }
 
+/** Shared tail of both scan paths: diagnostics to stderr, table or JSON to stdout. */
+function toOutput(
+  result: { table: RouteTable; diagnostics: Diagnostic[] },
+  summaryExtras: string[],
+  options: { json: boolean; color: boolean },
+): RoutesOutput {
+  const hasErrors = result.diagnostics.some((d) => d.severity === 'error');
+  const stderr = renderDiagnostics(result.diagnostics, options.color);
+
+  if (options.json) {
+    return { stdout: JSON.stringify(result, null, 2), stderr, exitCode: hasErrors ? 1 : 0 };
+  }
+  return {
+    stdout: hasErrors ? '' : renderRoutesTable(result.table, summaryExtras, options.color),
+    stderr,
+    exitCode: hasErrors ? 1 : 0,
+  };
+}
+
 /**
- * Execute the routes scan and format the result. Pure function of its inputs
- * (no process access), so tests can drive it directly.
+ * Execute the Expo Router scan and format the result. Pure function of its
+ * inputs (no process access), so tests can drive it directly.
  */
 export function runRoutes(
   appDir: string | undefined,
@@ -48,31 +69,75 @@ export function runRoutes(
   }
 
   const result = buildRouteTable(appDir);
-  const hasErrors = result.diagnostics.some((d) => d.severity === 'error');
-  const stderr = renderDiagnostics(result.diagnostics, options.color);
-
-  if (options.json) {
-    return { stdout: JSON.stringify(result, null, 2), stderr, exitCode: hasErrors ? 1 : 0 };
+  const summaryExtras: string[] = [];
+  if (result.apiRoutes.length > 0) {
+    summaryExtras.push(
+      `${result.apiRoutes.length} API route${result.apiRoutes.length === 1 ? '' : 's'}`,
+    );
   }
-  return {
-    stdout: hasErrors ? '' : renderRoutesTable(result, options.color),
-    stderr,
-    exitCode: hasErrors ? 1 : 0,
-  };
+  if (result.layouts.length > 0) {
+    summaryExtras.push(`${result.layouts.length} layout${result.layouts.length === 1 ? '' : 's'}`);
+  }
+  return toOutput(result, summaryExtras, options);
 }
 
 /**
- * `rndl routes [--json] [--app-dir <dir>]` — print the app's deep-link route
- * table, extracted from the Expo Router file system conventions.
+ * Load a React Navigation linking module (`<module>[#<export>]`, resolved
+ * from `cwd`) and format its route table. Pure aside from the module import
+ * itself, so tests can drive it directly.
+ */
+export async function runRoutesConfig(
+  specifier: string,
+  cwd: string,
+  options: { json: boolean; color: boolean },
+): Promise<RoutesOutput> {
+  const result = await scanLinkingModule(specifier, { cwd });
+  const summaryExtras: string[] = [];
+  if (result.prefixes.length > 0) {
+    summaryExtras.push(
+      `${result.prefixes.length} prefix${result.prefixes.length === 1 ? '' : 'es'}`,
+    );
+  }
+  if (result.pathlessScreens.length > 0) {
+    summaryExtras.push(
+      `${result.pathlessScreens.length} pathless screen${result.pathlessScreens.length === 1 ? '' : 's'}`,
+    );
+  }
+  return toOutput(result, summaryExtras, options);
+}
+
+/**
+ * `rndl routes [--json] [--app-dir <dir> | --config <module[#export]>]` —
+ * print the app's deep-link route table, extracted from Expo Router file
+ * conventions or from a React Navigation linking configuration.
  */
 export function routesCommand(): Command {
   return new Command('routes')
-    .description('List the deep-link routes of an Expo Router app')
+    .description('List the deep-link routes of an Expo Router or React Navigation app')
     .option('--json', 'print the full scan result as JSON', false)
-    .option('--app-dir <dir>', 'path to the Expo Router app directory (default: app/ or src/app/)')
-    .action((options: { json: boolean; appDir?: string }) => {
-      const appDir = resolveAppDir(process.cwd(), options.appDir);
-      const output = runRoutes(appDir, { json: options.json, color: shouldColor() });
+    .addOption(
+      new Option(
+        '--app-dir <dir>',
+        'path to the Expo Router app directory (default: app/ or src/app/)',
+      ).conflicts('config'),
+    )
+    .addOption(
+      new Option(
+        '--config <module[#export]>',
+        'React Navigation linking module, e.g. src/navigation/linking.ts#linking',
+      ).conflicts('appDir'),
+    )
+    .action(async (options: { json: boolean; appDir?: string; config?: string }) => {
+      const output =
+        options.config !== undefined
+          ? await runRoutesConfig(options.config, process.cwd(), {
+              json: options.json,
+              color: shouldColor(),
+            })
+          : runRoutes(resolveAppDir(process.cwd(), options.appDir), {
+              json: options.json,
+              color: shouldColor(),
+            });
       if (output.stdout.length > 0) {
         console.log(output.stdout);
       }
