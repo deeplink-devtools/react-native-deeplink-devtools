@@ -22,8 +22,27 @@ convention (dynamic segments, catch-alls, groups incl. array syntax, platform-sp
 variants, `+not-found`, `+api`, `+html`, `+native-intent`, `+middleware`), and warns —
 never crashes — on conventions it doesn't recognize.
 
+From a React Navigation project, point `--config` at the module exporting your
+[linking options](https://reactnavigation.org/docs/configuring-links):
+
+```sh
+rndl routes --config src/navigation/linking.ts            # default or `linking` export
+rndl routes --config src/navigation/linking.ts#myExport   # a specific named export
+rndl routes --config src/navigation/linking.ts --json
+```
+
+The module is executed under Node (TypeScript and ESM are handled for you), so keep the
+linking config in an isolated module that only exports plain data and `parse`/`stringify`
+functions — react-navigation imports are fine as `import type`, but importing app code or
+`react-native` will fail outside the native runtime (the error tells you exactly this).
+Relative imports work; tsconfig `paths` aliases are not resolved. Nested paths, `exact`,
+`alias`, regex-constrained and optional params, wildcards, and custom `parse`/`stringify`
+are all understood — params with a custom `parse` are reported as `unknown (custom parse)`.
+
 The CLI keeps runtime dependencies to a minimum: [commander](https://github.com/tj/commander.js)
-(argument parsing, zero transitive dependencies) plus this repo's own packages.
+(argument parsing, zero transitive dependencies) plus this repo's own packages, and the
+React Navigation adapter uses [jiti](https://github.com/unjs/jiti) (zero transitive
+dependencies) to execute TypeScript/ESM linking modules.
 
 ## Packages
 
