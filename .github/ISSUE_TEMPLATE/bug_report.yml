@@ -1,0 +1,39 @@
+name: Bug report
+description: Something in rndl or a @deeplink-devtools package doesn't work as documented
+labels: ['bug', 'needs-triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The more precise the versions and repro, the faster this gets fixed.
+  - type: input
+    id: package
+    attributes:
+      label: Package
+      placeholder: 'e.g. @deeplink-devtools/cli 0.2.1'
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node version, react-native version, router (expo-router / react-navigation) + version, Expo SDK if applicable
+      placeholder: |
+        macOS 15 / Node 22.4
+        react-native 0.80, expo-router 5.x, Expo SDK 53
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands and a minimal route table / linking config that triggers it. A repro repo link beats prose.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+      description: Include full CLI output (run with --json where available)
+    validations:
+      required: true
