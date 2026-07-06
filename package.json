@@ -17,7 +17,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "publish:dry": "yarn workspaces foreach -A --no-private exec npm publish --dry-run"
+    "publish:dry": "node scripts/publish-dry.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
