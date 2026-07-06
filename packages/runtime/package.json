@@ -1,6 +1,6 @@
 {
   "name": "@deeplink-devtools/runtime",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Tiny in-app deep-link reporter for React Native development builds. Guaranteed no-op in production.",
   "keywords": [
     "react-native",
@@ -9,6 +9,15 @@
   ],
   "license": "MIT",
   "author": "Amrith Vengalath <amrith@vengalath.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deeplink-devtools/react-native-deeplink-devtools.git",
+    "directory": "packages/runtime"
+  },
+  "homepage": "https://github.com/deeplink-devtools/react-native-deeplink-devtools/tree/main/packages/runtime#readme",
+  "bugs": {
+    "url": "https://github.com/deeplink-devtools/react-native-deeplink-devtools/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

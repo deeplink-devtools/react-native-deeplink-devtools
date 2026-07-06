@@ -1,6 +1,6 @@
 {
   "name": "@deeplink-devtools/adapter-react-navigation",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Builds a normalized deep-link route table from a React Navigation linking configuration.",
   "keywords": [
     "react-native",
@@ -10,6 +10,15 @@
   ],
   "license": "MIT",
   "author": "Amrith Vengalath <amrith@vengalath.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deeplink-devtools/react-native-deeplink-devtools.git",
+    "directory": "packages/adapter-react-navigation"
+  },
+  "homepage": "https://github.com/deeplink-devtools/react-native-deeplink-devtools/tree/main/packages/adapter-react-navigation#readme",
+  "bugs": {
+    "url": "https://github.com/deeplink-devtools/react-native-deeplink-devtools/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -32,7 +41,7 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@deeplink-devtools/core": "^0.0.0",
+    "@deeplink-devtools/core": "^0.0.1",
     "jiti": "^2.7.0"
   },
   "scripts": {

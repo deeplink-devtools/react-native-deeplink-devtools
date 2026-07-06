@@ -1,6 +1,6 @@
 {
   "name": "@deeplink-devtools/typegen",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Generates TypeScript route types and compile-time-checked deep-link builders from a route table.",
   "keywords": [
     "react-native",
@@ -10,6 +10,15 @@
   ],
   "license": "MIT",
   "author": "Amrith Vengalath <amrith@vengalath.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deeplink-devtools/react-native-deeplink-devtools.git",
+    "directory": "packages/typegen"
+  },
+  "homepage": "https://github.com/deeplink-devtools/react-native-deeplink-devtools/tree/main/packages/typegen#readme",
+  "bugs": {
+    "url": "https://github.com/deeplink-devtools/react-native-deeplink-devtools/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -32,7 +41,7 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@deeplink-devtools/core": "^0.0.0"
+    "@deeplink-devtools/core": "^0.0.1"
   },
   "scripts": {
     "build": "tsup",
