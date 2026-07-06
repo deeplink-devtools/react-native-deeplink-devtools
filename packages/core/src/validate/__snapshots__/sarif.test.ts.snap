@@ -1,0 +1,92 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`toSarif > matches the SARIF snapshot 1`] = `
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "https://example.com/.well-known/apple-app-site-association",
+                },
+              },
+            },
+          ],
+          "message": {
+            "text": "route /users/:id is not covered Fix: add a component",
+          },
+          "ruleId": "AASA_MISSING_ROUTE",
+        },
+        {
+          "level": "note",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "https://example.com/.well-known/apple-app-site-association",
+                },
+              },
+            },
+          ],
+          "message": {
+            "text": "a caching note",
+          },
+          "ruleId": "RNDL_NOTE",
+        },
+        {
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "https://example.com/.well-known/assetlinks.json",
+                },
+              },
+            },
+          ],
+          "message": {
+            "text": "wrong content type",
+          },
+          "ruleId": "ASSETLINKS_CONTENT_TYPE",
+        },
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/deeplink-devtools/react-native-deeplink-devtools",
+          "name": "rndl",
+          "rules": [
+            {
+              "id": "AASA_MISSING_ROUTE",
+              "name": "AASA_MISSING_ROUTE",
+              "shortDescription": {
+                "text": "route /users/:id is not covered",
+              },
+            },
+            {
+              "id": "RNDL_NOTE",
+              "name": "RNDL_NOTE",
+              "shortDescription": {
+                "text": "Informational note from rndl validate.",
+              },
+            },
+            {
+              "id": "ASSETLINKS_CONTENT_TYPE",
+              "name": "ASSETLINKS_CONTENT_TYPE",
+              "shortDescription": {
+                "text": "wrong content type",
+              },
+            },
+          ],
+          "version": "0.0.0",
+        },
+      },
+    },
+  ],
+  "version": "2.1.0",
+}
+`;

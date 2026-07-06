@@ -72,3 +72,5 @@ export interface Diagnostic {
   /** Concrete remediation, when one is known. */
   fix?: string;
 }
+
+export * from './validate/index.js';
