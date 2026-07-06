@@ -1,0 +1,53 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`buildValidateOutput > emits the full result as JSON 1`] = `
+{
+  "aasa": {
+    "diagnostics": [],
+    "fetchedFrom": "https://example.com/.well-known/apple-app-site-association",
+    "notes": [
+      "production devices fetch the AASA from Apple’s CDN (app-site-association.cdn-apple.com); changes can take up to 24h to propagate, or add \`?mode=developer\` to the associated-domains entitlement to bypass the CDN during development.",
+    ],
+    "parsed": {
+      "applinks": {
+        "details": [
+          {
+            "appID": "ABCDE12345.com.example.app",
+            "components": [
+              {
+                "/": "/*",
+              },
+            ],
+          },
+        ],
+      },
+    },
+    "requestedUrl": "https://example.com/.well-known/apple-app-site-association",
+  },
+  "assetlinks": {
+    "diagnostics": [],
+    "fetchedFrom": "https://example.com/.well-known/assetlinks.json",
+    "notes": [],
+    "parsed": [
+      {
+        "relation": [
+          "delegate_permission/common.handle_all_urls",
+        ],
+        "target": {
+          "namespace": "android_app",
+          "package_name": "com.example.app",
+          "sha256_cert_fingerprints": [
+            "AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99",
+          ],
+        },
+      },
+    ],
+    "requestedUrl": "https://example.com/.well-known/assetlinks.json",
+  },
+  "diagnostics": [],
+  "domain": "example.com",
+  "notes": [
+    "production devices fetch the AASA from Apple’s CDN (app-site-association.cdn-apple.com); changes can take up to 24h to propagate, or add \`?mode=developer\` to the associated-domains entitlement to bypass the CDN during development.",
+  ],
+}
+`;

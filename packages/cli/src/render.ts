@@ -111,3 +111,28 @@ export function renderDiagnostics(diagnostics: Diagnostic[], color: boolean): st
     })
     .join('\n');
 }
+
+/** Render informational notes, one dim `note:` block per entry. */
+export function renderNotes(notes: string[], color: boolean): string {
+  return notes.map((note) => paint(color, 'dim', `note: ${note}`)).join('\n');
+}
+
+/**
+ * One-line count of errors and warnings, e.g. `2 errors, 1 warning` or `clean`,
+ * for the summary of a validate run.
+ */
+export function summarizeDiagnostics(diagnostics: Diagnostic[]): string {
+  const errors = diagnostics.filter((d) => d.severity === 'error').length;
+  const warnings = diagnostics.length - errors;
+  if (errors === 0 && warnings === 0) {
+    return 'clean';
+  }
+  const parts: string[] = [];
+  if (errors > 0) {
+    parts.push(`${errors} error${errors === 1 ? '' : 's'}`);
+  }
+  if (warnings > 0) {
+    parts.push(`${warnings} warning${warnings === 1 ? '' : 's'}`);
+  }
+  return parts.join(', ');
+}
