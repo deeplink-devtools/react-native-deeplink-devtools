@@ -39,10 +39,28 @@ Relative imports work; tsconfig `paths` aliases are not resolved. Nested paths, 
 `alias`, regex-constrained and optional params, wildcards, and custom `parse`/`stringify`
 are all understood — params with a custom `parse` are reported as `unknown (custom parse)`.
 
+Validate a domain's universal-link and Android App Links files — the checks Apple and
+Google actually enforce (HTTPS, no redirects, the 128KB AASA cap, schema, fingerprints):
+
+```sh
+rndl validate --domain example.com                 # AASA + assetlinks.json
+rndl validate --domain example.com --json          # full result as JSON
+rndl validate --domain example.com --sarif         # SARIF 2.1.0 for CI upload
+rndl validate --domain example.com --package com.example.app --sha256 AA:BB:...
+```
+
+Run inside your app's directory, `validate` also cross-checks the route table (auto-detected
+the same way as `rndl routes`; override with `--app-dir`/`--config`, or skip with
+`--no-cross-check`): a route no non-excluded AASA component covers is an error
+(`AASA_MISSING_ROUTE`), a component matching no route is a warning (`AASA_ORPHAN_PATTERN`).
+Errors exit 1, so `rndl validate` in CI stops a broken universal link from shipping. Notes
+call out Apple-CDN caching and the `?mode=developer` entitlement.
+
 The CLI keeps runtime dependencies to a minimum: [commander](https://github.com/tj/commander.js)
 (argument parsing, zero transitive dependencies) plus this repo's own packages, and the
 React Navigation adapter uses [jiti](https://github.com/unjs/jiti) (zero transitive
-dependencies) to execute TypeScript/ESM linking modules.
+dependencies) to execute TypeScript/ESM linking modules. `validate` uses Node's built-in
+`fetch` — no HTTP dependency.
 
 ## Packages
 
