@@ -1,16 +1,29 @@
+import type { DeepLinkReportEvent } from '@deeplink-devtools/core';
+import type { CreateReporterOptions, DeepLinkReporter } from './types.js';
+
+export type { DeepLinkReportEvent };
+export type {
+  CreateReporterOptions,
+  DeepLinkReporter,
+  DeepLinkReporterOptions,
+  ReporterNavigationRef,
+} from './types.js';
+
 /**
- * A deep-link event captured in the app and reported to the `rndl` CLI during development.
+ * Create a low-level deep-link reporter for a custom router integration.
+ * Most apps should use the ready-made hooks instead:
+ * `@deeplink-devtools/runtime/expo-router` or
+ * `@deeplink-devtools/runtime/react-navigation`.
  *
- * The reporter hook that emits these events ships in an upcoming release. Its contract:
- * development-only, and a guaranteed no-op in production builds.
+ * Development-only: in production builds this returns an inert reporter and
+ * the transport implementation is not even part of the bundle.
  */
-export interface DeepLinkReportEvent {
-  /** The URL the app received. */
-  url: string;
-  /** Name of the route the router resolved for the URL, or `null` if nothing matched. */
-  matchedRoute: string | null;
-  /** Route params as parsed by the router. */
-  params: Record<string, unknown>;
-  /** Capture time, in milliseconds since the Unix epoch. */
-  ts: number;
+export function createReporter(options: CreateReporterOptions = {}): DeepLinkReporter {
+  if (__DEV__) {
+    type Impl = { createReporterImpl: (options?: CreateReporterOptions) => DeepLinkReporter };
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- lazy dev-only require: Metro production builds constant-fold __DEV__ and drop this branch (and the module behind it) from app bundles.
+    const impl = require('./internal/client.js') as Impl;
+    return impl.createReporterImpl(options);
+  }
+  return { report: () => undefined, close: () => undefined };
 }

@@ -33,10 +33,15 @@
     "node": ">=20"
   },
   "dependencies": {
+    "@clack/prompts": "^1.7.0",
     "@deeplink-devtools/adapter-expo-router": "^0.0.1",
     "@deeplink-devtools/adapter-react-navigation": "^0.0.1",
     "@deeplink-devtools/core": "^0.0.1",
-    "commander": "^15.0.0"
+    "commander": "^15.0.0",
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1"
   },
   "scripts": {
     "build": "tsup",

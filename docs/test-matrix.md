@@ -39,3 +39,46 @@ app installed on the simulator (1, 5) or a second device (10) and the entire
 **Android emu**/**Android USB** columns are **pending** — they need an AVD /
 physical hardware and a native build (`npx expo run:ios`/`run:android`) the CI
 host and this session lack. Maintainer to run those lanes before release.
+
+---
+
+# `rndl interactive` + runtime reporter manual test matrix
+
+`rndl interactive` runs a WebSocket server the in-app reporter
+(`@deeplink-devtools/runtime`) connects to, fires deep links on devices (reusing
+the `rndl open` machinery), and renders the live match the app reports. The
+session loop, comparison rendering, `adb reverse` wiring, and the reporter
+transport client are unit-tested with fakes (`packages/cli/src/commands/interactive.test.ts`,
+`packages/cli/src/reporter-server.test.ts`, `packages/runtime/src/internal/client.test.ts`);
+this grid covers the device- and app-facing parts that need a real build.
+
+Prerequisite for the reporter lanes: a **development build** of the example app
+with `useDeepLinkReporter()` wired (already done in `example-expo-router`
+`src/app/_layout.tsx` and `example-react-navigation` `src/App.tsx`), built via
+`npx expo run:ios` / `run:android`.
+
+| #   | Scenario                                                                                 | Command                                                                    | iOS sim                        | Android emu | Android USB |
+| --- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------ | ----------- | ----------- |
+| I1  | App connects to the server; hello shows platform/router                                  | `rndl interactive --app-dir example-expo-router/src/app --platform ios`    | pending (native build running) | pending     | pending     |
+| I2  | Fire a static route → live report, route match ✓                                         | select `/about`                                                            | pending                        | pending     | pending     |
+| I3  | Fire a `:id` route with a param → report shows param match ✓                              | select `/users/:id`, id=42                                                 | pending                        | pending     | pending     |
+| I4  | Fire a catch-all route → report matches the normalized pattern                            | select a `*slug` route                                                     | pending                        | pending     | pending     |
+| I5  | Deliberate mismatch (fire a route the app can't resolve) → red diff, matched shows ✗      | fire a route whose pattern the app maps to `+not-found`                     | pending                        | pending     | pending     |
+| I6  | No app connected → fire still works; timeout note explains wiring the reporter            | run without the app; select any route                                      | pending                        | pending     | pending     |
+| I7  | React Navigation app via `--config` → leaf-name match against ancestry-joined table name | `rndl interactive --config example-react-navigation/src/navigation/linking.ts --platform ios` | pending          | pending     | pending     |
+| I8  | Android auto `adb reverse` sets up the tunnel at startup and before each fire            | `rndl interactive --app-dir example-expo-router/src/app --platform android` | n/a                            | pending     | pending     |
+| I9  | Non-TTY stdin → `INTERACTIVE_NEEDS_TTY`, exit 1                                           | `rndl interactive < /dev/null`                                             | **pass 2026-07-07** (exit 1)   | —           | —           |
+| I10 | `--port` honored end-to-end (server binds it; reporter `{ port }` connects)              | `rndl interactive --port 9000 …` + `useDeepLinkReporter({ port: 9000 })`   | pending                        | pending     | pending     |
+
+Row I9 needs no device and was verified this session. Rows I1–I8, I10 need the
+native dev build; the **iOS sim** lanes are being executed live this session (see
+below), and **Android** lanes are pending maintainer hardware (no AVD/device on
+this host). The `adb reverse` argv (I8) is asserted in the unit tests even where
+no device runs.
+
+## Demo GIF
+
+The acceptance criterion asks for a demo GIF from a real `rndl interactive`
+session. Record the iOS-sim session (route pick → param prompt → fire → live
+match/mismatch) with a terminal recorder; GIF encoding/polish is left to the
+maintainer.

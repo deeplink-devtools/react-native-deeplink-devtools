@@ -37,4 +37,7 @@ jobs:
 
       - run: yarn test
 
+      # Two production Metro builds proving @deeplink-devtools/runtime adds <1KB to app bundles.
+      - run: yarn assert:runtime-noop
+
       - run: yarn publish:dry

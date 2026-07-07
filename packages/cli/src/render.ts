@@ -14,7 +14,8 @@ const ANSI = {
 
 type StyleName = keyof typeof ANSI;
 
-function paint(color: boolean, style: StyleName, text: string): string {
+/** Wrap `text` in the named ANSI style when `color` is on; otherwise pass it through. */
+export function paint(color: boolean, style: StyleName, text: string): string {
   if (!color || text.length === 0) {
     return text;
   }

@@ -36,7 +36,7 @@ export interface OpenOptions {
 }
 
 /** Outcome of attempting one platform. */
-type PlatformOutcome =
+export type PlatformOutcome =
   | { kind: 'opened'; line: string; note?: string }
   | { kind: 'skipped'; note: string }
   | { kind: 'failed'; diagnostic: Diagnostic };
@@ -202,11 +202,15 @@ async function resolveUrl(
 }
 
 /** A route table loaded for open, or the diagnostics explaining why it could not be. */
-type TableResolution =
+export type TableResolution =
   | { ok: true; table: RouteTable; prefixes: string[]; appDir?: string }
   | { ok: false; diagnostics: Diagnostic[] };
 
-async function loadTable(cwd: string, options: OpenOptions): Promise<TableResolution> {
+/** Load the route table exactly as `rndl open` does (`--config`, `--app-dir`, or auto-detect). */
+export async function loadTable(
+  cwd: string,
+  options: Pick<OpenOptions, 'config' | 'appDir'>,
+): Promise<TableResolution> {
   if (options.config !== undefined) {
     const result = await scanLinkingModule(options.config, { cwd });
     const errors = result.diagnostics.filter((d) => d.severity === 'error');
@@ -241,8 +245,8 @@ async function loadTable(cwd: string, options: OpenOptions): Promise<TableResolu
  * Resolve the scheme/prefix: `--scheme` wins, then React Navigation prefixes,
  * then the nearest app.json scheme (searched upward from the app directory).
  */
-function resolvePrefix(
-  options: OpenOptions,
+export function resolvePrefix(
+  options: Pick<OpenOptions, 'scheme'>,
   prefixes: string[],
   searchDir: string,
   notes: string[],
@@ -289,7 +293,7 @@ function routeNotFound(target: string, table: RouteTable): Diagnostic {
 }
 
 /** Open a URL on an iOS simulator via simctl. */
-async function openIos(
+export async function openIos(
   exec: ExecFn,
   url: string,
   device: string | undefined,
@@ -329,7 +333,7 @@ async function openIos(
 }
 
 /** Open a URL on an Android device via `adb shell am start`. */
-async function openAndroid(
+export async function openAndroid(
   exec: ExecFn,
   url: string,
   device: string | undefined,

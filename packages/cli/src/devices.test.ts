@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ExecFn, ExecResult } from './exec.js';
 import {
+  ensureAdbReverse,
   listAndroidDevices,
   listIosSimulators,
   parseAdbDevices,
@@ -199,5 +200,40 @@ describe('listIosSimulators / listAndroidDevices', () => {
     const result = await listIosSimulators(fakeExec({ stdout: 'garbage' }));
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.diagnostic.code).toBe('SIMCTL_UNPARSEABLE');
+  });
+});
+
+describe('ensureAdbReverse', () => {
+  it('issues the exact adb reverse argv and succeeds', async () => {
+    const calls: { file: string; args: string[] }[] = [];
+    const exec: ExecFn = (file, args) => {
+      calls.push({ file, args });
+      return Promise.resolve({ stdout: '', stderr: '', exitCode: 0, notFound: false });
+    };
+    const result = await ensureAdbReverse(exec, 'emulator-5554', 7635);
+    expect(result.ok).toBe(true);
+    expect(calls).toEqual([
+      { file: 'adb', args: ['-s', 'emulator-5554', 'reverse', 'tcp:7635', 'tcp:7635'] },
+    ]);
+  });
+
+  it('maps a missing adb to the shared ADB_NOT_FOUND diagnostic', async () => {
+    const result = await ensureAdbReverse(fakeExec({ notFound: true, exitCode: -1 }), 'x', 7635);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.diagnostic.code).toBe('ADB_NOT_FOUND');
+  });
+
+  it('maps a failed reverse to an actionable diagnostic naming the device', async () => {
+    const result = await ensureAdbReverse(
+      fakeExec({ exitCode: 1, stderr: 'error: device offline' }),
+      'emulator-5554',
+      7635,
+    );
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.diagnostic.code).toBe('ADB_REVERSE_FAILED');
+      expect(result.diagnostic.message).toContain('emulator-5554');
+      expect(result.diagnostic.message).toContain('device offline');
+    }
   });
 });

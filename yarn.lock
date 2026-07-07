@@ -1050,6 +1050,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clack/core@npm:1.4.3":
+  version: 1.4.3
+  resolution: "@clack/core@npm:1.4.3"
+  dependencies:
+    fast-wrap-ansi: "npm:^0.2.0"
+    sisteransi: "npm:^1.0.5"
+  checksum: 10c0/16cda430974bc02844cfa6e3f0e6e19695d97e915a580ab74603d34a1f00dcbdd8dc856adc3f89405e3555b5cf42568ae8687e748cb92c3434fe4d9fc7ebe664
+  languageName: node
+  linkType: hard
+
+"@clack/prompts@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@clack/prompts@npm:1.7.0"
+  dependencies:
+    "@clack/core": "npm:1.4.3"
+    fast-string-width: "npm:^3.0.2"
+    fast-wrap-ansi: "npm:^0.2.0"
+    sisteransi: "npm:^1.0.5"
+  checksum: 10c0/a11e4f8d4a03cfe2d9eb21c3263f0252648573977b96e495a7d4f159f7efa929fe775a6ac3fe7ae30d8acb72514d94418a2c4335855d05b575a41aa885c9ff26
+  languageName: node
+  linkType: hard
+
 "@deeplink-devtools/action@workspace:packages/action":
   version: 0.0.0-use.local
   resolution: "@deeplink-devtools/action@workspace:packages/action"
@@ -1079,9 +1101,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@deeplink-devtools/runtime@workspace:packages/runtime":
+"@deeplink-devtools/runtime@npm:^0.0.1, @deeplink-devtools/runtime@workspace:packages/runtime":
   version: 0.0.0-use.local
   resolution: "@deeplink-devtools/runtime@workspace:packages/runtime"
+  dependencies:
+    "@deeplink-devtools/core": "npm:^0.0.1"
+    "@types/react": "npm:~19.2.2"
+  peerDependencies:
+    expo-router: ">=4"
+    react: ">=18"
+    react-native: ">=0.76"
+  peerDependenciesMeta:
+    expo-router:
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -3196,6 +3228,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ws@npm:^8.18.1":
+  version: 8.18.1
+  resolution: "@types/ws@npm:8.18.1"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/61aff1129143fcc4312f083bc9e9e168aa3026b7dd6e70796276dcfb2c8211c4292603f9c4864fae702f2ed86e4abd4d38aa421831c2fd7f856c931a481afbab
+  languageName: node
+  linkType: hard
+
 "@types/yargs-parser@npm:*":
   version: 21.0.3
   resolution: "@types/yargs-parser@npm:21.0.3"
@@ -4762,6 +4803,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "example-expo-router@workspace:example-expo-router"
   dependencies:
+    "@deeplink-devtools/runtime": "npm:^0.0.1"
     "@types/react": "npm:~19.2.2"
     expo: "npm:~57.0.2"
     expo-constants: "npm:~57.0.3"
@@ -4788,6 +4830,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "example-react-navigation@workspace:example-react-navigation"
   dependencies:
+    "@deeplink-devtools/runtime": "npm:^0.0.1"
     "@react-navigation/bottom-tabs": "npm:^7.18.7"
     "@react-navigation/native": "npm:^7.3.7"
     "@react-navigation/native-stack": "npm:^7.17.9"
@@ -5238,6 +5281,31 @@ __metadata:
   version: 2.0.6
   resolution: "fast-levenshtein@npm:2.0.6"
   checksum: 10c0/111972b37338bcb88f7d9e2c5907862c280ebf4234433b95bc611e518d192ccb2d38119c4ac86e26b668d75f7f3894f4ff5c4982899afced7ca78633b08287c4
+  languageName: node
+  linkType: hard
+
+"fast-string-truncated-width@npm:^3.0.2":
+  version: 3.0.3
+  resolution: "fast-string-truncated-width@npm:3.0.3"
+  checksum: 10c0/043b8663397d14a3880ce4f3407bcda60b40db9bbeafe62863a35d1f9c69ea17c8da3fcd72de235553e6c9cd053128cde9e24ca0d4a7463208f48db3cd23d981
+  languageName: node
+  linkType: hard
+
+"fast-string-width@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "fast-string-width@npm:3.0.2"
+  dependencies:
+    fast-string-truncated-width: "npm:^3.0.2"
+  checksum: 10c0/c8822d175315bb353ebe782b65214ac53b13e3bf704e03b132ea7bdfa8de6a636375b3ab7a4097545393d109381c37c4f387c72a462c90b61412dbc4632f39a7
+  languageName: node
+  linkType: hard
+
+"fast-wrap-ansi@npm:^0.2.0":
+  version: 0.2.2
+  resolution: "fast-wrap-ansi@npm:0.2.2"
+  dependencies:
+    fast-string-width: "npm:^3.0.2"
+  checksum: 10c0/1aa7be4f7cb86f4bdb14691cb6bcc0b8df8b3b89df142ade3ae1602332dcf6f990cd750a923cd581ca0847808cb4ec1aa5afaafa7a72f849e87a2a62c98fa370
   languageName: node
   linkType: hard
 
@@ -7360,10 +7428,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-native-deeplink-devtools@workspace:packages/cli"
   dependencies:
+    "@clack/prompts": "npm:^1.7.0"
     "@deeplink-devtools/adapter-expo-router": "npm:^0.0.1"
     "@deeplink-devtools/adapter-react-navigation": "npm:^0.0.1"
     "@deeplink-devtools/core": "npm:^0.0.1"
+    "@types/ws": "npm:^8.18.1"
     commander: "npm:^15.0.0"
+    ws: "npm:^8.21.0"
   bin:
     rndl: dist/cli.js
   languageName: unknown
@@ -9094,7 +9165,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^8.12.1":
+"ws@npm:^8.12.1, ws@npm:^8.21.0":
   version: 8.21.0
   resolution: "ws@npm:8.21.0"
   peerDependencies:

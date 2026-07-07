@@ -76,3 +76,14 @@ export interface Diagnostic {
 export * from './validate/index.js';
 export { buildRouteUrl, normalizePrefix } from './url.js';
 export type { BuildRouteUrlResult } from './url.js';
+export {
+  DEFAULT_REPORTER_PORT,
+  REPORTER_PROTOCOL_VERSION,
+  parseReporterMessage,
+} from './protocol.js';
+export type {
+  DeepLinkReportEvent,
+  ReporterHello,
+  ReporterMessage,
+  ReporterReport,
+} from './protocol.js';

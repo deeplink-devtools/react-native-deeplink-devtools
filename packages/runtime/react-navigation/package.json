@@ -1,0 +1,4 @@
+{
+  "main": "../dist/react-navigation/index.js",
+  "types": "../dist/react-navigation/index.d.ts"
+}

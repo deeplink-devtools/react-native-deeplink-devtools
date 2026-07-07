@@ -1,0 +1,4 @@
+{
+  "main": "../dist/expo-router/index.js",
+  "types": "../dist/expo-router/index.d.ts"
+}

@@ -15,6 +15,10 @@ android/build/
 ios/build/
 ios/Pods/
 
+# Expo-managed example apps regenerate their native projects on demand (expo prebuild / run)
+example-*/ios/
+example-*/android/
+
 # test / coverage
 coverage/
 

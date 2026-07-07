@@ -276,6 +276,42 @@ export async function listIosSimulators(exec: ExecFn): Promise<DeviceListing<Ios
   }
 }
 
+/**
+ * Set up the `adb reverse` tunnel that lets an app on `serial` reach the dev
+ * transport at `localhost:<port>`. Idempotent — re-running for an existing
+ * tunnel succeeds.
+ */
+export async function ensureAdbReverse(
+  exec: ExecFn,
+  serial: string,
+  port: number,
+): Promise<{ ok: true } | { ok: false; diagnostic: Diagnostic }> {
+  const result = await exec('adb', ['-s', serial, 'reverse', `tcp:${port}`, `tcp:${port}`]);
+  if (result.notFound) {
+    return {
+      ok: false,
+      diagnostic: {
+        severity: 'error',
+        code: 'ADB_NOT_FOUND',
+        message: 'adb is not installed (Android devices need the Android platform-tools)',
+        fix: 'install the platform-tools and add them to PATH (e.g. via Android Studio or `brew install android-platform-tools`).',
+      },
+    };
+  }
+  if (result.exitCode !== 0) {
+    return {
+      ok: false,
+      diagnostic: {
+        severity: 'error',
+        code: 'ADB_REVERSE_FAILED',
+        message: `adb reverse tcp:${port} failed on ${serial}: ${result.stderr.trim() || `exit ${result.exitCode}`}`,
+        fix: 'reconnect the device (check `adb devices`), then re-run.',
+      },
+    };
+  }
+  return { ok: true };
+}
+
 /** List Android devices via the injected exec, mapping toolchain failures to diagnostics. */
 export async function listAndroidDevices(exec: ExecFn): Promise<DeviceListing<AndroidDevice>> {
   const result = await exec('adb', ['devices', '-l']);

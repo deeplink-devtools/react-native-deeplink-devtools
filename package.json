@@ -17,7 +17,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "publish:dry": "node scripts/publish-dry.mjs"
+    "publish:dry": "node scripts/publish-dry.mjs",
+    "assert:runtime-noop": "node scripts/assert-runtime-noop.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",

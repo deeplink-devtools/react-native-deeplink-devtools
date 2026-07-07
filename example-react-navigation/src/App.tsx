@@ -1,5 +1,6 @@
+import { useDeepLinkReporter } from '@deeplink-devtools/runtime/react-navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 
@@ -11,6 +12,8 @@ import type {
   SettingsStackParamList,
 } from './navigation/types';
 import { PlaceholderScreen } from './screens/PlaceholderScreen';
+
+const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const HomeTabs = createBottomTabNavigator<HomeTabsParamList>();
@@ -46,8 +49,9 @@ function SettingsNavigator() {
 }
 
 export default function App() {
+  useDeepLinkReporter({ navigationRef });
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer ref={navigationRef} linking={linking}>
       <StatusBar style="auto" />
       <RootStack.Navigator>
         <RootStack.Screen

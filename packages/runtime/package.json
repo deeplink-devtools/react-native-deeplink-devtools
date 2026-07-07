@@ -18,31 +18,50 @@
   "bugs": {
     "url": "https://github.com/deeplink-devtools/react-native-deeplink-devtools/issues"
   },
-  "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.cts",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./expo-router": {
+      "types": "./dist/expo-router/index.d.ts",
+      "default": "./dist/expo-router/index.js"
+    },
+    "./react-navigation": {
+      "types": "./dist/react-navigation/index.d.ts",
+      "default": "./dist/react-navigation/index.js"
     },
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "expo-router",
+    "react-navigation"
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup",
+    "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
+  },
+  "dependencies": {
+    "@deeplink-devtools/core": "^0.0.1"
+  },
+  "peerDependencies": {
+    "expo-router": ">=4",
+    "react": ">=18",
+    "react-native": ">=0.76"
+  },
+  "peerDependenciesMeta": {
+    "expo-router": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2"
   },
   "publishConfig": {
     "access": "public"

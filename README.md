@@ -74,11 +74,43 @@ makes that platform required. Route mode builds the URL from the route pattern a
 `--scheme`, the React Navigation `prefixes`, or your app.json. Still no new npm
 dependencies — `open` shells out to `xcrun simctl` and `adb`.
 
+Debug deep links interactively — pick a route, fill in its params, fire it on a device, and
+see exactly what your app matched, side by side with what you fired:
+
+```sh
+rndl interactive                                    # auto-detects your app; fires wherever a device runs
+rndl interactive --platform ios --scheme myapp      # target one platform / scheme explicitly
+rndl interactive --config src/navigation/linking.ts # React Navigation linking module
+```
+
+Add the in-app reporter to your development build and `rndl interactive` shows the live
+match — the route the router resolved and its params — highlighting any mismatch against
+what you fired:
+
+```tsx
+// Expo Router — app/_layout.tsx
+import { useDeepLinkReporter } from '@deeplink-devtools/runtime/expo-router';
+useDeepLinkReporter();
+
+// React Navigation — next to your NavigationContainer
+import { useDeepLinkReporter } from '@deeplink-devtools/runtime/react-navigation';
+useDeepLinkReporter({ navigationRef });
+```
+
+The reporter connects to the CLI over a localhost WebSocket (Android is tunneled with an
+automatic `adb reverse`). It is **dev-only and a guaranteed no-op in production** — the
+implementation sits behind React Native's `__DEV__` flag, so Metro strips it from release
+bundles entirely; a CI assertion holds the production cost under 1KB.
+
 The CLI keeps runtime dependencies to a minimum: [commander](https://github.com/tj/commander.js)
-(argument parsing, zero transitive dependencies) plus this repo's own packages, and the
-React Navigation adapter uses [jiti](https://github.com/unjs/jiti) (zero transitive
-dependencies) to execute TypeScript/ESM linking modules. `validate` uses Node's built-in
-`fetch` — no HTTP dependency.
+(argument parsing, zero transitive dependencies), [ws](https://github.com/websockets/ws)
+(the dev-transport WebSocket server for `interactive`, zero transitive dependencies), and
+[@clack/prompts](https://github.com/bombshell-dev/clack) (the `interactive` TUI), plus this
+repo's own packages. The React Navigation adapter uses [jiti](https://github.com/unjs/jiti)
+(zero transitive dependencies) to execute TypeScript/ESM linking modules. `validate` uses
+Node's built-in `fetch` — no HTTP dependency. The `runtime` package ships no runtime
+dependencies of its own; `react`, `react-native`, and `expo-router` are peer dependencies
+(the last optional).
 
 ## Packages
 
