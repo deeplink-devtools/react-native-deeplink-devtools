@@ -1,0 +1,122 @@
+name: 'rndl deep-link checks'
+description: 'Validate universal links (AASA) and Android App Links, and inspect the deep-link route table, with rndl.'
+author: 'Amrith Vengalath'
+
+branding:
+  icon: 'link'
+  color: 'purple'
+
+inputs:
+  domain:
+    description: 'Domain to validate (AASA + assetlinks.json). Leave empty to run a routes-only check.'
+    required: false
+    default: ''
+  package:
+    description: 'Expected Android package name. Falls back to app.json when omitted.'
+    required: false
+    default: ''
+  sha256:
+    description: 'Expected SHA-256 signing-cert fingerprint to look for in assetlinks.json.'
+    required: false
+    default: ''
+  app-dir:
+    description: 'Expo Router app directory. Enables the routes scan and the AASA route cross-check.'
+    required: false
+    default: ''
+  config:
+    description: 'React Navigation linking module (module[#export]). Enables the routes scan and cross-check.'
+    required: false
+    default: ''
+  working-directory:
+    description: 'Directory to run rndl in.'
+    required: false
+    default: '.'
+  version:
+    description: 'Version of react-native-deeplink-devtools to run via npx.'
+    required: false
+    default: 'latest'
+  cli-command:
+    description: 'Advanced: override the rndl invocation (e.g. a local build path). Defaults to npx of the pinned version.'
+    required: false
+    default: ''
+  sarif-file:
+    description: 'Path (relative to working-directory) to write the SARIF report to.'
+    required: false
+    default: 'rndl.sarif'
+  upload-sarif:
+    description: 'Upload the SARIF report to GitHub code scanning. Needs security-events: write.'
+    required: false
+    default: 'true'
+  fail-on:
+    description: 'Fail the job on "error" (default) or on "warn" (errors and warnings).'
+    required: false
+    default: 'error'
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve the rndl command
+      id: rndl
+      shell: bash
+      env:
+        CLI_COMMAND: ${{ inputs.cli-command }}
+        VERSION: ${{ inputs.version }}
+      run: |
+        if [ -n "$CLI_COMMAND" ]; then
+          echo "cmd=$CLI_COMMAND" >> "$GITHUB_OUTPUT"
+        else
+          echo "cmd=npx --yes react-native-deeplink-devtools@$VERSION" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Inspect routes
+      if: inputs.app-dir != '' || inputs.config != ''
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        RNDL_CMD: ${{ steps.rndl.outputs.cmd }}
+        APP_DIR: ${{ inputs.app-dir }}
+        CONFIG: ${{ inputs.config }}
+      run: |
+        FLAGS=()
+        if [ -n "$APP_DIR" ]; then FLAGS+=(--app-dir "$APP_DIR"); fi
+        if [ -n "$CONFIG" ]; then FLAGS+=(--config "$CONFIG"); fi
+        # $RNDL_CMD is intentionally word-split (e.g. "npx --yes pkg@ver").
+        $RNDL_CMD routes "${FLAGS[@]}"
+        $RNDL_CMD routes "${FLAGS[@]}" --json > "$RUNNER_TEMP/rndl-routes.json"
+        {
+          echo "### rndl routes"
+          cat "$RUNNER_TEMP/rndl-routes.json" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const j=JSON.parse(s);const n=(j.table&&j.table.routes||[]).length;console.log("Scanned "+n+" deep-linkable route(s).")})'
+        } >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Validate domain
+      if: inputs.domain != ''
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        RNDL_CMD: ${{ steps.rndl.outputs.cmd }}
+        RNDL_FAIL_ON: ${{ inputs.fail-on }}
+        DOMAIN: ${{ inputs.domain }}
+        PACKAGE: ${{ inputs.package }}
+        SHA256: ${{ inputs.sha256 }}
+        APP_DIR: ${{ inputs.app-dir }}
+        CONFIG: ${{ inputs.config }}
+        SARIF_FILE: ${{ inputs.sarif-file }}
+      run: |
+        FLAGS=()
+        if [ -n "$PACKAGE" ]; then FLAGS+=(--package "$PACKAGE"); fi
+        if [ -n "$SHA256" ]; then FLAGS+=(--sha256 "$SHA256"); fi
+        if [ -n "$APP_DIR" ]; then FLAGS+=(--app-dir "$APP_DIR"); fi
+        if [ -n "$CONFIG" ]; then FLAGS+=(--config "$CONFIG"); fi
+        # rndl exits 1 on errors; capture output without failing the step so the
+        # SARIF/annotations always get produced. annotate.mjs sets the exit code.
+        $RNDL_CMD validate --domain "$DOMAIN" "${FLAGS[@]}" --sarif > "$SARIF_FILE" || true
+        $RNDL_CMD validate --domain "$DOMAIN" "${FLAGS[@]}" --json > "$RUNNER_TEMP/rndl-validate.json" || true
+        node "$GITHUB_ACTION_PATH/annotate.mjs" "$RUNNER_TEMP/rndl-validate.json"
+
+    - name: Upload SARIF to code scanning
+      if: inputs.domain != '' && inputs.upload-sarif == 'true'
+      uses: github/codeql-action/upload-sarif@v3
+      continue-on-error: true
+      with:
+        sarif_file: ${{ inputs.working-directory }}/${{ inputs.sarif-file }}
+        category: rndl

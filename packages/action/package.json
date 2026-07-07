@@ -2,7 +2,27 @@
   "name": "@deeplink-devtools/action",
   "version": "0.0.0",
   "private": true,
-  "description": "GitHub Action wrapping rndl validate and rndl routes. Placeholder until the CLI ships.",
+  "description": "GitHub Action wrapping rndl validate and rndl routes: annotates pull requests and uploads SARIF.",
+  "keywords": [
+    "react-native",
+    "deep-link",
+    "universal-links",
+    "app-links",
+    "github-action"
+  ],
   "license": "MIT",
-  "author": "Amrith Vengalath <amrith@vengalath.com>"
+  "author": "Amrith Vengalath <amrith@vengalath.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deeplink-devtools/react-native-deeplink-devtools.git",
+    "directory": "packages/action"
+  },
+  "homepage": "https://github.com/deeplink-devtools/react-native-deeplink-devtools/tree/main/packages/action#readme",
+  "bugs": {
+    "url": "https://github.com/deeplink-devtools/react-native-deeplink-devtools/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  }
 }
