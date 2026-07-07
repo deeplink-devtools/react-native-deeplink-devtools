@@ -1,10 +1,9 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { Command, Option } from 'commander';
 import type { FetchedDocument, RouteTable, ValidationResult } from '@deeplink-devtools/core';
 import { toSarif, validateAasa, validateAssetlinks } from '@deeplink-devtools/core';
 import { buildRouteTable } from '@deeplink-devtools/adapter-expo-router';
 import { scanLinkingModule } from '@deeplink-devtools/adapter-react-navigation';
+import { readAppConfig } from '../app-config.js';
 import { fetchAasa, fetchAssetlinks, normalizeDomain } from '../fetch.js';
 import { renderDiagnostics, renderNotes, shouldColor, summarizeDiagnostics } from '../render.js';
 import { resolveAppDir } from './routes.js';
@@ -104,22 +103,6 @@ function renderReport(result: ValidationResult, color: boolean): string {
   return blocks.join('\n');
 }
 
-/** Best-effort read of `expo.android.package` from an app.json near `cwd`. */
-function detectPackageName(cwd: string): string | undefined {
-  const appJson = join(cwd, 'app.json');
-  if (!existsSync(appJson)) {
-    return undefined;
-  }
-  try {
-    const parsed = JSON.parse(readFileSync(appJson, 'utf8')) as {
-      expo?: { android?: { package?: string } };
-    };
-    return parsed.expo?.android?.package;
-  } catch {
-    return undefined;
-  }
-}
-
 /** Resolve a route table for the cross-check from the CLI flags (or auto-detection). */
 async function resolveTable(
   cwd: string,
@@ -182,7 +165,7 @@ export function validateCommand(toolVersion: string): Command {
           ...(options.config !== undefined ? { config: options.config } : {}),
           crossCheck: options.crossCheck,
         });
-        const packageName = options.package ?? detectPackageName(cwd);
+        const packageName = options.package ?? readAppConfig(cwd).androidPackage;
 
         const output = await runValidate(options.domain, {
           json: options.json ?? false,
