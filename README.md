@@ -10,6 +10,8 @@ matches live, and generate TypeScript types for your deep links.
 > packages are on npm to hold the names. To try the full toolkit today, run the CLI from a clone
 > of this repo (see the quickstart).
 
+<p align="center"><img width="1330" alt=“rndl demo" src="https://dl.vengalath.com/rndl/deeplink-devtools-demo.gif" /></p>
+
 ## Why
 
 Deep linking is one of the most error-prone parts of a React Native app, and the failures are
