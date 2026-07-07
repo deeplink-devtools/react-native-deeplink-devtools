@@ -56,6 +56,24 @@ the same way as `rndl routes`; override with `--app-dir`/`--config`, or skip wit
 Errors exit 1, so `rndl validate` in CI stops a broken universal link from shipping. Notes
 call out Apple-CDN caching and the `?mode=developer` entitlement.
 
+Open a deep link on a running simulator or device — pass a full URL, or a route name/pattern
+that `rndl open` fills in from your route table and app scheme:
+
+```sh
+rndl open exampleexporouter://users/42                       # a full URL, opened wherever a device is running
+rndl open '/users/:id' --app-dir src/app --params id=42      # build the URL from an Expo Router route
+rndl open HomeTabs/Feed/Article --config src/navigation/linking.ts --params slug=hi
+rndl open https://example.com/users/42 --platform ios --device "iPhone 17 Pro"
+```
+
+With no `--platform`, `open` fires on every platform that has a device (a booted iOS
+simulator via `xcrun simctl`, an `adb` device/emulator) and exits 0 if at least one opened —
+a platform with no device is a note, not a failure. Naming `--platform ios|android|both`
+makes that platform required. Route mode builds the URL from the route pattern and params
+(missing required params error before any device is touched), taking the scheme from
+`--scheme`, the React Navigation `prefixes`, or your app.json. Still no new npm
+dependencies — `open` shells out to `xcrun simctl` and `adb`.
+
 The CLI keeps runtime dependencies to a minimum: [commander](https://github.com/tj/commander.js)
 (argument parsing, zero transitive dependencies) plus this repo's own packages, and the
 React Navigation adapter uses [jiti](https://github.com/unjs/jiti) (zero transitive
