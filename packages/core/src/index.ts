@@ -74,3 +74,5 @@ export interface Diagnostic {
 }
 
 export * from './validate/index.js';
+export { buildRouteUrl, normalizePrefix } from './url.js';
+export type { BuildRouteUrlResult } from './url.js';
