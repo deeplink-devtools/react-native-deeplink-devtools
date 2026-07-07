@@ -16,7 +16,7 @@ Physical iOS devices are **out of scope**: `simctl` drives simulators only.
 
 | #   | Scenario                                                                  | Command (from repo root unless noted)                                                                                         | iOS sim                                                                                                  | Android emu | Android USB |
 | --- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------- | ----------- |
-| 1   | Custom scheme, app **installed** → app opens the route                    | `rndl open exampleexporouter://users/42 --platform ios`                                                                       | pending (needs `npx expo run:ios`)                                                                       | pending     | pending     |
+| 1   | Custom scheme, app **installed** → app opens the route                    | `rndl open exampleexporouter://users/42 --platform ios`                                                                       | **pass 2026-07-08** (app installed via `expo run:ios`; opened /users/42, exit 0)                         | pending     | pending     |
 | 2   | Custom scheme, app **not** installed → actionable failure                 | `rndl open exampleexporouter://users/42 --platform ios`                                                                       | **pass 2026-07-07** (`IOS_OPEN_FAILED`, LSApplicationWorkspaceErrorDomain code=115, no-app hint, exit 1) | pending     | pending     |
 | 3   | `https://` URL → opens (Safari/browser without the app)                   | `rndl open https://example.com --platform ios`                                                                                | **pass 2026-07-07** (Safari opened, exit 0)                                                              | pending     | pending     |
 | 4   | Route mode `--app-dir` + auto scheme from app.json                        | `rndl open '/users/:id' --app-dir example-expo-router/src/app --params id=42 --platform ios`                                  | **pass 2026-07-07** (built `exampleexporouter://users/42`; then row-2 no-app failure, app not installed) | pending     | pending     |
@@ -34,11 +34,13 @@ Physical iOS devices are **out of scope**: `simctl` drives simulators only.
 ## Executed lanes (this session)
 
 The **iOS sim** column rows 2, 3, 4, 6, 7, 8, 9, 12, 14 were executed 2026-07-07
-against a booted iPhone 17 Pro (Xcode 26, iOS 26.4). Rows needing the example
-app installed on the simulator (1, 5) or a second device (10) and the entire
-**Android emu**/**Android USB** columns are **pending**: they need an AVD /
-physical hardware and a native build (`npx expo run:ios`/`run:android`) the CI
-host and this session lack. Maintainer to run those lanes before release.
+against a booted iPhone 17 Pro (Xcode 26, iOS 26.4). Row 1 was executed
+2026-07-08 once `npx expo run:ios` built and installed the example app (the
+spaces-in-path blocker is now cleared). Row 5 (React Navigation, needs that
+example app installed), a second device (row 10), and the entire **Android
+emu**/**Android USB** columns remain **pending**: they need the React Navigation
+build, an AVD, or physical hardware this host lacks. Maintainer to run those
+lanes before release.
 
 ---
 
@@ -57,38 +59,41 @@ with `useDeepLinkReporter()` wired (already done in `example-expo-router`
 `src/app/_layout.tsx` and `example-react-navigation` `src/App.tsx`), built via
 `npx expo run:ios` / `run:android`.
 
-| #   | Scenario                                                                                 | Command                                                                                       | iOS sim                      | Android emu | Android USB |
-| --- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------- | ----------- | ----------- |
-| I1  | App connects to the server; hello shows platform/router                                  | `rndl interactive --app-dir example-expo-router/src/app --platform ios`                       | blocked (see note)           | pending     | pending     |
-| I2  | Fire a static route → live report, route match ✓                                         | select `/about`                                                                               | blocked                      | pending     | pending     |
-| I3  | Fire a `:id` route with a param → report shows param match ✓                             | select `/users/:id`, id=42                                                                    | blocked                      | pending     | pending     |
-| I4  | Fire a catch-all route → report matches the normalized pattern                           | select a `*slug` route                                                                        | blocked                      | pending     | pending     |
-| I5  | Deliberate mismatch (fire a route the app can't resolve) → red diff, matched shows ✗     | fire a route whose pattern the app maps to `+not-found`                                       | blocked                      | pending     | pending     |
-| I6  | No app connected → fire still works; timeout note explains wiring the reporter           | run without the app; select any route                                                         | blocked                      | pending     | pending     |
-| I7  | React Navigation app via `--config` → leaf-name match against ancestry-joined table name | `rndl interactive --config example-react-navigation/src/navigation/linking.ts --platform ios` | blocked                      | pending     | pending     |
-| I8  | Android auto `adb reverse` sets up the tunnel at startup and before each fire            | `rndl interactive --app-dir example-expo-router/src/app --platform android`                   | n/a                          | pending     | pending     |
-| I9  | Non-TTY stdin → `INTERACTIVE_NEEDS_TTY`, exit 1                                          | `rndl interactive < /dev/null`                                                                | **pass 2026-07-07** (exit 1) | n/a         | n/a         |
-| I10 | `--port` honored end-to-end (server binds it; reporter `{ port }` connects)              | `rndl interactive --port 9000 …` + `useDeepLinkReporter({ port: 9000 })`                      | blocked                      | pending     | pending     |
+| #   | Scenario                                                                                 | Command                                                                                       | iOS sim                                                                        | Android emu | Android USB |
+| --- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ----------- | ----------- |
+| I1  | App connects to the server; hello shows platform/router                                  | `rndl interactive --app-dir example-expo-router/src/app --platform ios`                       | **pass 2026-07-08** (iOS sim; hello platform=ios, router=expo-router)          | pending     | pending     |
+| I2  | Fire a static route → live report, route match ✓                                         | select `/about`                                                                               | **pass 2026-07-08** (fired /about; matchedRoute /about, params {})             | pending     | pending     |
+| I3  | Fire a `:id` route with a param → report shows param match ✓                             | select `/users/:id`, id=42                                                                    | **pass 2026-07-08** (fired /users/42; matchedRoute /users/:id, params {id:42}) | pending     | pending     |
+| I4  | Fire a catch-all route → report matches the normalized pattern                           | select a `*slug` route                                                                        | pending (interactive TUI)                                                      | pending     | pending     |
+| I5  | Deliberate mismatch (fire a route the app can't resolve) → red diff, matched shows ✗     | fire a route whose pattern the app maps to `+not-found`                                       | pending (interactive TUI)                                                      | pending     | pending     |
+| I6  | No app connected → fire still works; timeout note explains wiring the reporter           | run without the app; select any route                                                         | pending (interactive TUI)                                                      | pending     | pending     |
+| I7  | React Navigation app via `--config` → leaf-name match against ancestry-joined table name | `rndl interactive --config example-react-navigation/src/navigation/linking.ts --platform ios` | pending (interactive TUI)                                                      | pending     | pending     |
+| I8  | Android auto `adb reverse` sets up the tunnel at startup and before each fire            | `rndl interactive --app-dir example-expo-router/src/app --platform android`                   | n/a                                                                            | pending     | pending     |
+| I9  | Non-TTY stdin → `INTERACTIVE_NEEDS_TTY`, exit 1                                          | `rndl interactive < /dev/null`                                                                | **pass 2026-07-07** (exit 1)                                                   | n/a         | n/a         |
+| I10 | `--port` honored end-to-end (server binds it; reporter `{ port }` connects)              | `rndl interactive --port 9000 …` + `useDeepLinkReporter({ port: 9000 })`                      | pending (interactive TUI)                                                      | pending     | pending     |
 
-Row I9 needs no device and passed live. The **iOS sim** rows I1-I7, I10 are
-**blocked** on this host: `npx expo run:ios` cannot build because the repo path
-contains spaces, which the Expo SDK 57 / CocoaPods prebuilt-module build scripts
-mishandle (see MEMORY `ios-native-build-blocked-by-spaces-in-repo-path`). The
-fix is to clone the repo to a space-free path; **maintainer** to run these lanes
-(and all **Android** lanes, which also need an AVD/device this host lacks) there.
-The `adb reverse` argv (I8) is asserted in the unit tests even without a device.
+Row I9 needs no device and passed live. The **spaces-in-path build blocker is
+now cleared**: at the current space-free repo path, `npx expo run:ios` builds
+(Build Succeeded, 0 errors) and installs the example dev build on the iPhone 17
+Pro simulator (Xcode 26.4, iOS 26).
 
-Instead, the reporter↔CLI **transport was verified live** (2026-07-07) with the
-real shipped code: the runtime's public `createReporter()`, through its
-`__DEV__` gate and default socket factory, with ws supplying the `WebSocket`
-global, connected to the real `startReporterServer` over a real localhost
-socket, and both a **buffered** (pre-connect) and a **live** (post-connect)
-report arrived with the correct identity and params. Only the RN hook glue
-(Linking capture + router-state reading) is left to the device lanes above.
+On-device reporter lanes **I1, I2, and I3 passed live** (2026-07-08) on that
+simulator: the real app's `useDeepLinkReporter()` connected and streamed a
+correct hello (`platform=ios`, `router=expo-router`) plus report events for
+`exampleexporouter://users/42` (matchedRoute `/users/:id`, params `{id:42}`) and
+`exampleexporouter://about` (matchedRoute `/about`, params `{}`). These were
+observed against a standalone server speaking the shipped reporter protocol
+(`parseReporterMessage`), because `rndl interactive`'s TUI needs a TTY this
+non-interactive session lacks (see I9); the TUI rendering itself is unit-tested.
+
+The remaining interactive lanes (I4 to I7, I10) need the `rndl interactive` TUI
+driven by hand and a free Metro port; the **Android** lanes need an AVD or device
+this host lacks. The `adb reverse` argv (I8) is asserted in the unit tests even
+without a device. **Maintainer** to run those, and to record the demo GIF.
 
 ## Demo GIF
 
 The acceptance criterion asks for a demo GIF from a real `rndl interactive`
-session. This needs the native dev build (blocked here; see above), so the GIF
-is deferred to the maintainer, recorded on a space-free clone: route pick →
-param prompt → fire → live match/mismatch, captured with a terminal recorder.
+session. The native dev build now works (see above), so this is a straightforward
+terminal recording for the maintainer: route pick, param prompt, fire, then the
+live match or mismatch.
