@@ -24,7 +24,7 @@ None
 ## Checklist
 
 - [ ] Linked issue exists (or this is a typo/docs fix)
-- [ ] One concern only — no unrelated refactors or formatting churn
+- [ ] One concern only: no unrelated refactors or formatting churn
 - [ ] Typecheck, lint, tests, and build pass locally
 - [ ] New/changed public API has TSDoc and no `any`
 - [ ] Changeset added (user-facing changes)

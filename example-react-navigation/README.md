@@ -17,14 +17,14 @@ configuration exercises every linking-config convention. It doubles as the fixtu
 | `HomeTabs/Profile`       | `/u/:id`                          | `alias` (extra incoming pattern)               |
 | `Promo`                  | `/promo/:code(SUMMER\|WINTER)`    | string shorthand, regex-constrained param      |
 | `Settings/Notifications` | `/settings/notifications`         | child of a pathless navigator                  |
-| `Settings/DevMenu`       | —                                 | pathless screen (reachable only by navigate()) |
+| `Settings/DevMenu`       | n/a                               | pathless screen (reachable only by navigate()) |
 | `NotFound`               | `/*`                              | wildcard / not-found                           |
 
 ## Why `src/navigation/linking.ts` is isolated
 
 `rndl routes --config` executes the linking module under plain Node, so it must not pull
 in `react-native` or app components at import time. The module keeps its react-navigation
-import type-only and exports nothing but data and `parse`/`stringify` functions — copy
+import type-only and exports nothing but data and `parse`/`stringify` functions. Copy
 this pattern into your own app to make its linking config tooling-friendly.
 
 ## Run it
