@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { Command } from 'commander';
+import { openCommand } from './commands/open.js';
 import { routesCommand } from './commands/routes.js';
 import { validateCommand } from './commands/validate.js';
 
@@ -18,5 +19,6 @@ const program = new Command()
 
 program.addCommand(routesCommand());
 program.addCommand(validateCommand(pkg.version));
+program.addCommand(openCommand());
 
 await program.parseAsync();
