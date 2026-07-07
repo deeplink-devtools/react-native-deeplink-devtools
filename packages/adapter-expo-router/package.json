@@ -1,6 +1,6 @@
 {
   "name": "@deeplink-devtools/adapter-expo-router",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Builds a normalized deep-link route table from an Expo Router app directory.",
   "keywords": [
     "react-native",
@@ -41,7 +41,7 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@deeplink-devtools/core": "^0.0.1"
+    "@deeplink-devtools/core": "^0.0.2"
   },
   "scripts": {
     "build": "tsup",

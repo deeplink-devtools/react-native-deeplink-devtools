@@ -1,6 +1,6 @@
 {
   "name": "example-react-navigation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "main": "index.ts",
   "scripts": {
@@ -9,7 +9,7 @@
     "ios": "expo start --ios"
   },
   "dependencies": {
-    "@deeplink-devtools/runtime": "^0.0.1",
+    "@deeplink-devtools/runtime": "^0.0.2",
     "@react-navigation/bottom-tabs": "^7.18.7",
     "@react-navigation/native": "^7.3.7",
     "@react-navigation/native-stack": "^7.17.9",

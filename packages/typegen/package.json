@@ -1,6 +1,6 @@
 {
   "name": "@deeplink-devtools/typegen",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generates TypeScript route types and compile-time-checked deep-link builders from a route table.",
   "keywords": [
     "react-native",
@@ -41,7 +41,7 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@deeplink-devtools/core": "^0.0.1"
+    "@deeplink-devtools/core": "^0.0.2"
   },
   "scripts": {
     "build": "tsup",

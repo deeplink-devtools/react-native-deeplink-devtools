@@ -1,5 +1,13 @@
 # @deeplink-devtools/runtime
 
+## 0.0.2
+
+### Patch Changes
+
+- 69facbb: Add a README to each published package so it renders on npm.
+- Updated dependencies [69facbb]
+  - @deeplink-devtools/core@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes

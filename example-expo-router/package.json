@@ -1,7 +1,7 @@
 {
   "name": "example-expo-router",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "start": "expo start",
@@ -10,7 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@deeplink-devtools/runtime": "^0.0.1",
+    "@deeplink-devtools/runtime": "^0.0.2",
     "expo": "~57.0.2",
     "expo-constants": "~57.0.3",
     "expo-dev-client": "~57.0.5",

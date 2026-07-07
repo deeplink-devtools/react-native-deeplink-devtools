@@ -1078,34 +1078,34 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@deeplink-devtools/adapter-expo-router@npm:^0.0.1, @deeplink-devtools/adapter-expo-router@workspace:packages/adapter-expo-router":
+"@deeplink-devtools/adapter-expo-router@npm:^0.0.2, @deeplink-devtools/adapter-expo-router@workspace:packages/adapter-expo-router":
   version: 0.0.0-use.local
   resolution: "@deeplink-devtools/adapter-expo-router@workspace:packages/adapter-expo-router"
   dependencies:
-    "@deeplink-devtools/core": "npm:^0.0.1"
+    "@deeplink-devtools/core": "npm:^0.0.2"
   languageName: unknown
   linkType: soft
 
-"@deeplink-devtools/adapter-react-navigation@npm:^0.0.1, @deeplink-devtools/adapter-react-navigation@workspace:packages/adapter-react-navigation":
+"@deeplink-devtools/adapter-react-navigation@npm:^0.0.2, @deeplink-devtools/adapter-react-navigation@workspace:packages/adapter-react-navigation":
   version: 0.0.0-use.local
   resolution: "@deeplink-devtools/adapter-react-navigation@workspace:packages/adapter-react-navigation"
   dependencies:
-    "@deeplink-devtools/core": "npm:^0.0.1"
+    "@deeplink-devtools/core": "npm:^0.0.2"
     jiti: "npm:^2.7.0"
   languageName: unknown
   linkType: soft
 
-"@deeplink-devtools/core@npm:^0.0.1, @deeplink-devtools/core@workspace:packages/core":
+"@deeplink-devtools/core@npm:^0.0.2, @deeplink-devtools/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@deeplink-devtools/core@workspace:packages/core"
   languageName: unknown
   linkType: soft
 
-"@deeplink-devtools/runtime@npm:^0.0.1, @deeplink-devtools/runtime@workspace:packages/runtime":
+"@deeplink-devtools/runtime@npm:^0.0.2, @deeplink-devtools/runtime@workspace:packages/runtime":
   version: 0.0.0-use.local
   resolution: "@deeplink-devtools/runtime@workspace:packages/runtime"
   dependencies:
-    "@deeplink-devtools/core": "npm:^0.0.1"
+    "@deeplink-devtools/core": "npm:^0.0.2"
     "@types/react": "npm:~19.2.2"
   peerDependencies:
     expo-router: ">=4"
@@ -1121,7 +1121,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@deeplink-devtools/typegen@workspace:packages/typegen"
   dependencies:
-    "@deeplink-devtools/core": "npm:^0.0.1"
+    "@deeplink-devtools/core": "npm:^0.0.2"
   languageName: unknown
   linkType: soft
 
@@ -4803,7 +4803,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "example-expo-router@workspace:example-expo-router"
   dependencies:
-    "@deeplink-devtools/runtime": "npm:^0.0.1"
+    "@deeplink-devtools/runtime": "npm:^0.0.2"
     "@types/react": "npm:~19.2.2"
     expo: "npm:~57.0.2"
     expo-constants: "npm:~57.0.3"
@@ -4830,7 +4830,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "example-react-navigation@workspace:example-react-navigation"
   dependencies:
-    "@deeplink-devtools/runtime": "npm:^0.0.1"
+    "@deeplink-devtools/runtime": "npm:^0.0.2"
     "@react-navigation/bottom-tabs": "npm:^7.18.7"
     "@react-navigation/native": "npm:^7.3.7"
     "@react-navigation/native-stack": "npm:^7.17.9"
@@ -7429,9 +7429,9 @@ __metadata:
   resolution: "react-native-deeplink-devtools@workspace:packages/cli"
   dependencies:
     "@clack/prompts": "npm:^1.7.0"
-    "@deeplink-devtools/adapter-expo-router": "npm:^0.0.1"
-    "@deeplink-devtools/adapter-react-navigation": "npm:^0.0.1"
-    "@deeplink-devtools/core": "npm:^0.0.1"
+    "@deeplink-devtools/adapter-expo-router": "npm:^0.0.2"
+    "@deeplink-devtools/adapter-react-navigation": "npm:^0.0.2"
+    "@deeplink-devtools/core": "npm:^0.0.2"
     "@types/ws": "npm:^8.18.1"
     commander: "npm:^15.0.0"
     ws: "npm:^8.21.0"

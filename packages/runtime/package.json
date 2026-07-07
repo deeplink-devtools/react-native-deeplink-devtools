@@ -1,6 +1,6 @@
 {
   "name": "@deeplink-devtools/runtime",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Tiny in-app deep-link reporter for React Native development builds. Guaranteed no-op in production.",
   "keywords": [
     "react-native",
@@ -48,7 +48,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@deeplink-devtools/core": "^0.0.1"
+    "@deeplink-devtools/core": "^0.0.2"
   },
   "peerDependencies": {
     "expo-router": ">=4",
