@@ -7,7 +7,11 @@
     "scheme": "examplereactnavigation",
     "userInterfaceStyle": "automatic",
     "android": {
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.examplereactnavigation"
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.example-react-navigation"
     }
   }
 }
