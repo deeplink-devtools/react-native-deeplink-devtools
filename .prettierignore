@@ -2,3 +2,4 @@ dist/
 .yarn/
 coverage/
 yarn.lock
+expo-env.d.ts
