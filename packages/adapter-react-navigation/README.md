@@ -27,7 +27,9 @@ const { table, diagnostics } = await scanLinkingModule('src/navigation/linking.t
 
 Keep the linking config in an isolated module that only exports plain data and `parse`/`stringify`
 functions (react-navigation imports are fine as `import type`), so it can run outside the native
-runtime. See the [root README](https://github.com/deeplink-devtools/react-native-deeplink-devtools#readme)
+runtime. Full documentation lives at
+[vengalath.com/npm/react-native-deeplink-devtools](https://vengalath.com/npm/react-native-deeplink-devtools/).
+See the [root README](https://github.com/deeplink-devtools/react-native-deeplink-devtools#readme)
 for the full toolkit.
 
 ## License

@@ -32,8 +32,28 @@ useDeepLinkReporter({ navigationRef });
 ```
 
 The reporter connects to `rndl interactive` on a localhost WebSocket (Android is tunneled with an
-automatic `adb reverse`). Options include the transport `port`.
+automatic `adb reverse`). Both hooks accept transport options: `port` (defaults to 7635, match
+`rndl interactive --port <n>`) and `host` (defaults to `localhost`).
 
+## Custom routers: `createReporter`
+
+If you are integrating a router the ready-made hooks do not cover, the main entry exports the
+low-level client:
+
+```ts
+import { createReporter } from '@deeplink-devtools/runtime';
+
+const reporter = createReporter({ router: 'my-router' });
+reporter.report({ url, matchedRoute, params, ts: Date.now() });
+reporter.close();
+```
+
+`createReporter` takes the same transport options plus `router`, `appName`, and `platform`
+(announced to the CLI), and follows the same rules as the hooks: fire-and-forget reporting, brief
+buffering while disconnected, silent failures, and an inert stub in production builds.
+
+Full documentation lives at
+[vengalath.com/npm/react-native-deeplink-devtools/runtime-reporter](https://vengalath.com/npm/react-native-deeplink-devtools/runtime-reporter/).
 See the [root README](https://github.com/deeplink-devtools/react-native-deeplink-devtools#readme)
 for the full workflow.
 

@@ -23,8 +23,11 @@ npm install @deeplink-devtools/core
 - **Dev-transport protocol:** `parseReporterMessage` and the reporter message types shared by the
   CLI and the `runtime` package.
 
-Every export is documented with TSDoc. See the [root README](https://github.com/deeplink-devtools/react-native-deeplink-devtools#readme)
-for the full toolkit.
+Every export is documented with TSDoc. See
+[vengalath.com/npm/react-native-deeplink-devtools/packages](https://vengalath.com/npm/react-native-deeplink-devtools/packages/)
+for the package reference and the
+[root README](https://github.com/deeplink-devtools/react-native-deeplink-devtools#readme) for the
+full toolkit.
 
 ## License
 

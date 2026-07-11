@@ -70,6 +70,8 @@ import type { RouteTable } from '@deeplink-devtools/core';
 const source: string = generateDeepLinkTypes(routeTable, { defaultPrefix: 'myapp://' });
 ```
 
+Full documentation lives at
+[vengalath.com/npm/react-native-deeplink-devtools/typegen](https://vengalath.com/npm/react-native-deeplink-devtools/typegen/).
 See the [root README](https://github.com/deeplink-devtools/react-native-deeplink-devtools#readme)
 for the rest of the toolkit.
 

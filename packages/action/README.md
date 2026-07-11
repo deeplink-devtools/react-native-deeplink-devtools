@@ -42,18 +42,19 @@ AASA route cross-check.
 
 ## Inputs
 
-| Input               | Default      | Description                                                                                   |
-| ------------------- | ------------ | --------------------------------------------------------------------------------------------- |
-| `domain`            | (empty)      | Domain to validate (AASA + assetlinks.json). Empty runs a routes-only check.                  |
-| `package`           | (empty)      | Expected Android package name. Falls back to `app.json` when omitted.                         |
-| `sha256`            | (empty)      | Expected SHA-256 signing-cert fingerprint to look for in assetlinks.json.                     |
-| `app-dir`           | (empty)      | Expo Router app directory. Enables the routes scan and the AASA route cross-check.            |
-| `config`            | (empty)      | React Navigation linking module (`module[#export]`). Enables the routes scan and cross-check. |
-| `working-directory` | `.`          | Directory to run `rndl` in.                                                                   |
-| `version`           | `latest`     | Version of `react-native-deeplink-devtools` to run via `npx`.                                 |
-| `sarif-file`        | `rndl.sarif` | Path (relative to `working-directory`) to write the SARIF report to.                          |
-| `upload-sarif`      | `true`       | Upload the SARIF report to GitHub code scanning (needs `security-events: write`).             |
-| `fail-on`           | `error`      | Fail the job on `error` (default) or on `warn` (errors and warnings).                         |
+| Input               | Default      | Description                                                                                                  |
+| ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------ |
+| `domain`            | (empty)      | Domain to validate (AASA + assetlinks.json). Empty runs a routes-only check.                                 |
+| `package`           | (empty)      | Expected Android package name. Falls back to `app.json` when omitted.                                        |
+| `sha256`            | (empty)      | Expected SHA-256 signing-cert fingerprint to look for in assetlinks.json.                                    |
+| `app-dir`           | (empty)      | Expo Router app directory. Enables the routes scan and the AASA route cross-check.                           |
+| `config`            | (empty)      | React Navigation linking module (`module[#export]`). Enables the routes scan and cross-check.                |
+| `working-directory` | `.`          | Directory to run `rndl` in.                                                                                  |
+| `version`           | `latest`     | Version of `react-native-deeplink-devtools` to run via `npx`.                                                |
+| `cli-command`       | (empty)      | Advanced: override the `rndl` invocation (e.g. a local build path). Defaults to `npx` of the pinned version. |
+| `sarif-file`        | `rndl.sarif` | Path (relative to `working-directory`) to write the SARIF report to.                                         |
+| `upload-sarif`      | `true`       | Upload the SARIF report to GitHub code scanning (needs `security-events: write`).                            |
+| `fail-on`           | `error`      | Fail the job on `error` (default) or on `warn` (errors and warnings).                                        |
 
 ## What you get
 
@@ -64,6 +65,9 @@ AASA route cross-check.
 - **A job summary** table of all findings.
 - **SARIF in the Security tab** when `upload-sarif` is on and `security-events: write` is granted.
 - **A red check** when `fail-on` is met, so a broken universal link stops the merge.
+
+Full action documentation lives at
+[vengalath.com/npm/react-native-deeplink-devtools/github-action](https://vengalath.com/npm/react-native-deeplink-devtools/github-action/).
 
 ## Verifying against a real domain
 

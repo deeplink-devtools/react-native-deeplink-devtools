@@ -22,6 +22,8 @@ import { buildRouteTable } from '@deeplink-devtools/adapter-expo-router';
 const { table, diagnostics } = buildRouteTable('src/app');
 ```
 
+Full documentation lives at
+[vengalath.com/npm/react-native-deeplink-devtools](https://vengalath.com/npm/react-native-deeplink-devtools/).
 See the [root README](https://github.com/deeplink-devtools/react-native-deeplink-devtools#readme)
 for the full toolkit.
 
