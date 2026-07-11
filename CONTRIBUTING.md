@@ -4,7 +4,7 @@ Thanks for your interest in improving react-native-deeplink-devtools! A little s
 
 ## Before you write code
 
-- **Open or find an issue first** for anything beyond a typo or doc fix. The project follows a phased roadmap, and a change that fights the current direction can be hard to merge even when it's well built, so a quick issue discussion saves everyone time.
+- **Open or find an issue first** for anything beyond a typo or doc fix. The project follows a roadmap, and a change that fights the current direction can be hard to merge even when it's well built, so a quick issue discussion saves everyone time.
 - **Out of scope** (won't be accepted): attribution/marketing links (Branch/Adjust territory), push-notification deep links, and anything that modifies a user's linking config. The toolkit inspects and validates; it doesn't rewrite your app.
 
 ## PR requirements

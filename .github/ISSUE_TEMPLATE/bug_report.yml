@@ -10,7 +10,7 @@ body:
     id: package
     attributes:
       label: Package
-      placeholder: 'e.g. @deeplink-devtools/cli 0.2.1'
+      placeholder: 'e.g. react-native-deeplink-devtools 1.0.0'
     validations:
       required: true
   - type: textarea

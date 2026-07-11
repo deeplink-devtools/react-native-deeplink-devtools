@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Question / discussion
-    url: https://github.com/amrithvengalath/react-native-deeplink-devtools/discussions
-    about: Usage questions and open-ended discussion (update this URL once the repo is public)
+    url: https://github.com/deeplink-devtools/react-native-deeplink-devtools/discussions
+    about: Usage questions and open-ended discussion
