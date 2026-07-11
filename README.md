@@ -1,16 +1,17 @@
 # react-native-deeplink-devtools
 
+[![npm](https://img.shields.io/npm/v/react-native-deeplink-devtools)](https://www.npmjs.com/package/react-native-deeplink-devtools)
+[![CI](https://github.com/deeplink-devtools/react-native-deeplink-devtools/actions/workflows/ci.yml/badge.svg)](https://github.com/deeplink-devtools/react-native-deeplink-devtools/actions/workflows/ci.yml)
+[![license](https://img.shields.io/npm/l/react-native-deeplink-devtools)](LICENSE)
+
 Deep-link tooling for React Native: inspect your app's route table, validate universal links
 (AASA) and Android App Links (assetlinks.json), open links on simulators and devices, debug
 matches live, and generate TypeScript types for your deep links.
 
-<!-- Demo GIF (rndl interactive: pick a route, fill params, fire, see the live match) goes here, above the fold. -->
+> Full documentation lives at
+> [vengalath.com/npm/react-native-deeplink-devtools](https://vengalath.com/npm/react-native-deeplink-devtools/).
 
-> **Status:** pre-1.0 and under active development; interfaces may still change. Early `0.0.x`
-> packages are on npm to hold the names. To try the full toolkit today, run the CLI from a clone
-> of this repo (see the quickstart).
-
-<p align="center"><img width="1330" alt=“rndl demo" src="https://dl.vengalath.com/rndl/deeplink-devtools-demo.gif" /></p>
+<p align="center"><img width="1330" alt="rndl demo" src="https://dl.vengalath.com/rndl/deeplink-devtools-demo.gif" /></p>
 
 ## Why
 
@@ -23,15 +24,12 @@ you run locally and in CI, so you never ship a broken link again.
 ## 30-second quickstart
 
 ```sh
-git clone https://github.com/deeplink-devtools/react-native-deeplink-devtools
-cd react-native-deeplink-devtools && yarn install && yarn build
-
-# from your app directory (or point --app-dir / --config at it):
-node <path-to-clone>/packages/cli/dist/cli.js routes
-node <path-to-clone>/packages/cli/dist/cli.js validate --domain example.com
+npm install --save-dev react-native-deeplink-devtools
+# or run one-off without installing:
+npx react-native-deeplink-devtools routes
 ```
 
-Once installed as the `rndl` bin, the commands read `rndl routes`, `rndl validate`, and so on.
+Requires Node >= 20. Installed, the binary is `rndl`:
 
 ```sh
 rndl routes                          # aligned table of every deep-linkable route
@@ -200,14 +198,14 @@ not an attribution platform, and it does not modify your linking configuration.
 
 ## Packages
 
-| Package                                       | Purpose                                                       |
-| --------------------------------------------- | ------------------------------------------------------------- |
-| `react-native-deeplink-devtools`              | The `rndl` CLI: `routes`, `validate`, `open`, `interactive`   |
-| `@deeplink-devtools/core`                     | Route-table model, matchers, validators (pure TS, no RN deps) |
-| `@deeplink-devtools/adapter-expo-router`      | Builds a route table from an Expo Router `app/` directory     |
-| `@deeplink-devtools/adapter-react-navigation` | Builds a route table from a React Navigation linking config   |
-| `@deeplink-devtools/runtime`                  | Tiny in-app reporter for live deep-link debugging (dev-only)  |
-| `@deeplink-devtools/typegen`                  | Generates typed route helpers from your route table           |
+| Package                                       | Purpose                                                                |
+| --------------------------------------------- | ---------------------------------------------------------------------- |
+| `react-native-deeplink-devtools`              | The `rndl` CLI: `routes`, `validate`, `open`, `interactive`, `typegen` |
+| `@deeplink-devtools/core`                     | Route-table model, matchers, validators (pure TS, no RN deps)          |
+| `@deeplink-devtools/adapter-expo-router`      | Builds a route table from an Expo Router `app/` directory              |
+| `@deeplink-devtools/adapter-react-navigation` | Builds a route table from a React Navigation linking config            |
+| `@deeplink-devtools/runtime`                  | Tiny in-app reporter for live deep-link debugging (dev-only)           |
+| `@deeplink-devtools/typegen`                  | Generates typed route helpers from your route table                    |
 
 ## Out of scope
 
