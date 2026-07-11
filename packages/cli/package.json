@@ -37,6 +37,7 @@
     "@deeplink-devtools/adapter-expo-router": "^0.0.2",
     "@deeplink-devtools/adapter-react-navigation": "^0.0.2",
     "@deeplink-devtools/core": "^0.0.2",
+    "@deeplink-devtools/typegen": "^0.0.2",
     "commander": "^15.0.0",
     "ws": "^8.21.0"
   },

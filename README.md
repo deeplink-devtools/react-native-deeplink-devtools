@@ -38,6 +38,7 @@ rndl routes                          # aligned table of every deep-linkable rout
 rndl validate --domain example.com   # check AASA + assetlinks.json, exit 1 on errors
 rndl open '/users/:id' --params id=42 # build the URL and open it on a running device
 rndl interactive                     # pick a route, fire it, watch the live match
+rndl typegen --out src/deeplinks.gen.ts # generate typed, tsc-checked deep-link helpers
 ```
 
 In CI, the [GitHub Action](packages/action) wraps `rndl validate` and `rndl routes`, annotates the
@@ -134,6 +135,33 @@ The reporter connects to the CLI over a localhost WebSocket (Android is tunneled
 behind React Native's `__DEV__` flag, so Metro strips it from release bundles entirely, and a CI
 assertion holds the production cost under 1KB.
 
+### `rndl typegen`
+
+Generate typed deep links from your route table, so a wrong route or param fails `tsc` instead of
+shipping a broken link.
+
+```sh
+rndl typegen --out src/deeplinks.gen.ts --app-dir src/app                       # Expo Router
+rndl typegen --out src/deeplinks.gen.ts --config src/navigation/linking.ts#linking # React Navigation
+rndl typegen --out src/deeplinks.gen.ts --app-dir src/app --watch               # regenerate on change
+```
+
+The generated module gives you a compile-time-checked `buildDeepLink` and a typed `useTypedParams`
+hook:
+
+```ts
+import { buildDeepLink, useTypedParams } from './deeplinks.gen';
+
+const url = buildDeepLink('/users/[id]', { id: '42' }); // 'myapp://users/42', scheme baked in
+const { id } = useTypedParams<'/users/[id]'>(); // typed for the route
+
+buildDeepLink('/users/[id]', {}); // compile error: missing 'id'
+```
+
+Route keys are router-native (`/users/[id]` for Expo Router, `/users/:id` for React Navigation).
+The generated file imports its small runtime from `@deeplink-devtools/core`, so add that as a
+dependency of your app. React Navigation params with a custom `parse` function are typed `unknown`.
+
 ### Dependencies
 
 The CLI keeps runtime dependencies to a minimum: [commander](https://github.com/tj/commander.js)
@@ -157,15 +185,15 @@ own; `react`, `react-native`, and `expo-router` are peer dependencies (the last 
 
 ## Compared to the alternatives
 
-| Task                                    | rndl          | `npx uri-scheme` | Manual (curl + editor) | Attribution SDKs (Branch, Adjust) |
-| --------------------------------------- | ------------- | ---------------- | ---------------------- | --------------------------------- |
-| Print the app's deep-link route table   | yes           | no               | no                     | no                                |
-| Validate AASA / assetlinks.json in CI   | yes           | no               | partial (by hand)      | no                                |
-| Cross-check routes against AASA         | yes           | no               | no                     | no                                |
-| Open a link on a device                 | yes           | yes              | yes (`xcrun`/`adb`)    | no                                |
-| Live match debugging (fired vs matched) | yes           | no               | no                     | no                                |
-| Typed deep links (`tsc`-checked)        | yes (planned) | no               | no                     | no                                |
-| Attribution / marketing links           | no            | no               | no                     | yes                               |
+| Task                                    | rndl | `npx uri-scheme` | Manual (curl + editor) | Attribution SDKs (Branch, Adjust) |
+| --------------------------------------- | ---- | ---------------- | ---------------------- | --------------------------------- |
+| Print the app's deep-link route table   | yes  | no               | no                     | no                                |
+| Validate AASA / assetlinks.json in CI   | yes  | no               | partial (by hand)      | no                                |
+| Cross-check routes against AASA         | yes  | no               | no                     | no                                |
+| Open a link on a device                 | yes  | yes              | yes (`xcrun`/`adb`)    | no                                |
+| Live match debugging (fired vs matched) | yes  | no               | no                     | no                                |
+| Typed deep links (`tsc`-checked)        | yes  | no               | no                     | no                                |
+| Attribution / marketing links           | no   | no               | no                     | yes                               |
 
 `rndl` is developer tooling for testing and validating the links your app already declares. It is
 not an attribution platform, and it does not modify your linking configuration.
@@ -179,7 +207,7 @@ not an attribution platform, and it does not modify your linking configuration.
 | `@deeplink-devtools/adapter-expo-router`      | Builds a route table from an Expo Router `app/` directory     |
 | `@deeplink-devtools/adapter-react-navigation` | Builds a route table from a React Navigation linking config   |
 | `@deeplink-devtools/runtime`                  | Tiny in-app reporter for live deep-link debugging (dev-only)  |
-| `@deeplink-devtools/typegen`                  | Generates typed route helpers from your route table (planned) |
+| `@deeplink-devtools/typegen`                  | Generates typed route helpers from your route table           |
 
 ## Out of scope
 

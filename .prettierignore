@@ -3,3 +3,4 @@ dist/
 coverage/
 yarn.lock
 expo-env.d.ts
+*.gen.ts

@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { interactiveCommand } from './commands/interactive.js';
 import { openCommand } from './commands/open.js';
 import { routesCommand } from './commands/routes.js';
+import { typegenCommand } from './commands/typegen.js';
 import { validateCommand } from './commands/validate.js';
 
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
@@ -22,5 +23,6 @@ program.addCommand(routesCommand());
 program.addCommand(validateCommand(pkg.version));
 program.addCommand(openCommand());
 program.addCommand(interactiveCommand());
+program.addCommand(typegenCommand());
 
 await program.parseAsync();
