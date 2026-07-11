@@ -1,0 +1,45 @@
+name: Deep links e2e
+
+# Live-domain end-to-end for packages/action: runs `rndl validate` against a real
+# domain, annotates the PR with any findings, and uploads a SARIF report to code
+# scanning. The first successful SARIF upload registers the "rndl" tool under
+# Security -> Code scanning (no manual enablement needed).
+#
+# DOMAIN below is the domain being validated. `example.com` has no
+# apple-app-site-association / assetlinks.json, so it deliberately produces AASA/
+# assetlinks error annotations out of the box, which is what proves the pipeline.
+# Point it at your own seeded-broken domain to verify against real infrastructure.
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: 'Domain to validate (overrides the default).'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  security-events: write # required to upload SARIF to code scanning
+
+env:
+  DOMAIN: example.com
+
+jobs:
+  deeplinks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Uses the action source in this repo; the action itself runs the published
+      # CLI via npx, so no build step is needed here.
+      - uses: ./packages/action
+        with:
+          domain: ${{ github.event.inputs.domain || env.DOMAIN }}
+          app-dir: example-expo-router/src/app
+          fail-on: error
