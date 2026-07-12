@@ -66,7 +66,7 @@ function propName(name: string): string {
 
 /**
  * The TypeScript type for one param. `building` (what `buildDeepLink` accepts)
- * is always `string` — path values, catch-all values (as one `a/b/c` string),
+ * is always `string` - path values, catch-all values (as one `a/b/c` string),
  * and query values all go into the URL as strings. `reading` (what
  * `useTypedParams` returns) reflects what the router hands back: `string`,
  * `string[]` for catch-all, or `unknown` for a React Navigation custom `parse`.

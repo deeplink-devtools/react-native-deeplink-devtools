@@ -13,7 +13,7 @@ export interface ReactNavigationReporterOptions extends DeepLinkReporterOptions 
 
 /**
  * Report every deep link this app receives to a running `rndl interactive`
- * session — React Navigation edition. Call it once next to your
+ * session - React Navigation edition. Call it once next to your
  * `NavigationContainer`, passing the container ref:
  *
  * ```tsx App.tsx

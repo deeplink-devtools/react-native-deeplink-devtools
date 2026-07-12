@@ -6,7 +6,7 @@ export default function PromoScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>
-        Shared route /promo — one file serving the (marketing) and (shop) groups. Active:{' '}
+        Shared route /promo - one file serving the (marketing) and (shop) groups. Active:{' '}
         {segments.join('/')}
       </Text>
     </View>

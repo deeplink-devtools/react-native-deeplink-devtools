@@ -18,7 +18,7 @@ export interface SarifResult {
   }[];
 }
 
-/** A minimal SARIF 2.1.0 log — the subset `rndl validate --sarif` emits. */
+/** A minimal SARIF 2.1.0 log - the subset `rndl validate --sarif` emits. */
 export interface SarifLog {
   $schema: string;
   version: '2.1.0';

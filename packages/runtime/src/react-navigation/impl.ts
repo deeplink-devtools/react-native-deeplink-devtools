@@ -18,7 +18,7 @@ export function useDeepLinkReporterImpl(options: ReactNavigationReporterOptions)
     try {
       unsubscribe = navigationRef.addListener('state', () => setStateTick((tick) => tick + 1));
     } catch {
-      // Ref not ready to listen — reports fall back to the settle timeout.
+      // Ref not ready to listen - reports fall back to the settle timeout.
     }
     return () => {
       try {

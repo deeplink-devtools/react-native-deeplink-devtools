@@ -73,7 +73,7 @@ export async function loadLinkingModule(
 
   // Caches off: rndl must re-read edited configs on every run and must never
   // write jiti's cache directory into the user's node_modules. interopDefault
-  // off too — its Proxy makes `mod.default` fall back to the namespace itself,
+  // off too - its Proxy makes `mod.default` fall back to the namespace itself,
   // which would defeat the "is there a real default export?" check below.
   const jiti = createJiti(pathToFileURL(absolutePath).href, {
     interopDefault: false,

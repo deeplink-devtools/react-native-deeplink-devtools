@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { systemExec } from './exec.js';
 
-// Exercise the real execFile wrapper by spawning this same Node binary — no
+// Exercise the real execFile wrapper by spawning this same Node binary - no
 // external toolchain needed, works identically on CI (ubuntu) and macOS.
 describe('systemExec', () => {
   it('captures stdout and a zero exit code', async () => {

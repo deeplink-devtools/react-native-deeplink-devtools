@@ -8,7 +8,7 @@ import { fetchAasa, fetchAssetlinks, normalizeDomain } from '../fetch.js';
 import { renderDiagnostics, renderNotes, shouldColor, summarizeDiagnostics } from '../render.js';
 import { resolveAppDir } from './routes.js';
 
-/** What `rndl validate` writes and how it exits — pure data, for testability. */
+/** What `rndl validate` writes and how it exits - pure data, for testability. */
 export interface ValidateOutput {
   stdout: string;
   stderr: string;
@@ -85,12 +85,12 @@ function renderReport(result: ValidationResult, color: boolean): string {
   const blocks: string[] = [];
   blocks.push(`Validating ${result.domain}`);
 
-  blocks.push(`\napple-app-site-association — ${summarizeDiagnostics(result.aasa.diagnostics)}`);
+  blocks.push(`\napple-app-site-association - ${summarizeDiagnostics(result.aasa.diagnostics)}`);
   if (result.aasa.diagnostics.length > 0) {
     blocks.push(renderDiagnostics(result.aasa.diagnostics, color));
   }
 
-  blocks.push(`\nassetlinks.json — ${summarizeDiagnostics(result.assetlinks.diagnostics)}`);
+  blocks.push(`\nassetlinks.json - ${summarizeDiagnostics(result.assetlinks.diagnostics)}`);
   if (result.assetlinks.diagnostics.length > 0) {
     blocks.push(renderDiagnostics(result.assetlinks.diagnostics, color));
   }
@@ -124,7 +124,7 @@ async function resolveTable(
 
 /**
  * `rndl validate --domain <domain> [--json | --sarif] [--package <name>]
- * [--sha256 <fp>] [--app-dir <dir> | --config <module>] [--no-cross-check]` —
+ * [--sha256 <fp>] [--app-dir <dir> | --config <module>] [--no-cross-check]`  -
  * validate a domain's Apple App Site Association and Android assetlinks.json.
  */
 export function validateCommand(toolVersion: string): Command {

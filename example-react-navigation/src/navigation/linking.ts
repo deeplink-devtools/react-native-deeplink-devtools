@@ -6,7 +6,7 @@ import type { RootStackParamList } from './types';
  * The app's deep-link configuration, kept in an isolated module on purpose:
  * it has no runtime imports (the react-navigation import above is type-only),
  * so tools like `rndl routes --config` can execute it under plain Node without
- * pulling in react-native. Keep it that way — export only plain data plus
+ * pulling in react-native. Keep it that way - export only plain data plus
  * parse/stringify functions.
  */
 export const linking: LinkingOptions<RootStackParamList> = {

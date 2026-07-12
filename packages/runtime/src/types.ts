@@ -33,7 +33,7 @@ export interface CreateReporterOptions extends DeepLinkReporterOptions {
 /**
  * A connected (or connecting) reporter. Reporting is fire-and-forget: events
  * sent while the CLI is unreachable are buffered briefly and flushed on
- * connect, and every failure path is silent — the reporter never throws and
+ * connect, and every failure path is silent - the reporter never throws and
  * never logs.
  */
 export interface DeepLinkReporter {
@@ -46,7 +46,7 @@ export interface DeepLinkReporter {
 /**
  * The slice of a React Navigation container ref the reporter needs. Any ref
  * created with `createNavigationContainerRef()` (or received from
- * `useNavigationContainerRef()`) satisfies it — the type is structural so this
+ * `useNavigationContainerRef()`) satisfies it - the type is structural so this
  * package needs no dependency on React Navigation itself.
  */
 export interface ReporterNavigationRef {

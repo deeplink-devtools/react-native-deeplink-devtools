@@ -52,7 +52,7 @@ function detectPlatform(): string | undefined {
 /**
  * The real reporter used in development builds: connects to the `rndl` CLI's
  * WebSocket server, announces itself, and forwards captured events. Silent by
- * design — the CLI not running is the normal case, so every failure path is
+ * design - the CLI not running is the normal case, so every failure path is
  * swallowed and reconnects back off quietly ({@link backoffDelayMs}).
  */
 export function createReporterImpl(
@@ -135,7 +135,7 @@ export function createReporterImpl(
       if (socket !== next || open) {
         return;
       }
-      // Failed before opening: detach and retry ourselves — not every stack
+      // Failed before opening: detach and retry ourselves - not every stack
       // follows an error with a close event.
       socket = null;
       try {

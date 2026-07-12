@@ -47,7 +47,7 @@ describe('buildRouteTable: pattern composition', () => {
     });
     const list = result.table.routes.find((r) => r.name === 'Tabs/Feed/List');
     expect(list?.pattern).toBe('/feed');
-    // Navigator + initial child sharing a pattern is legal — no diagnostic.
+    // Navigator + initial child sharing a pattern is legal - no diagnostic.
     expect(result.diagnostics).toEqual([]);
   });
 

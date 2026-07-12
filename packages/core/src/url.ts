@@ -7,7 +7,7 @@ export interface BuildRouteUrlResult {
   /**
    * Required parameters with no supplied value; the URL cannot be built until
    * these are provided. `'*'` marks an unnamed wildcard segment (the pattern
-   * cannot be filled from params — pass a full URL instead).
+   * cannot be filled from params - pass a full URL instead).
    */
   missing: string[];
   /** Supplied parameters the route does not declare; appended as query parameters. */
@@ -28,7 +28,7 @@ export function normalizePrefix(prefix: string): string {
     return '';
   }
   if (trimmed.includes('://')) {
-    // scheme://authority — drop a trailing slash so path-joining is clean.
+    // scheme://authority - drop a trailing slash so path-joining is clean.
     // scheme:// with no authority (myapp://) is left exactly as written.
     return trimmed.endsWith('/') && !trimmed.endsWith('://')
       ? trimmed.replace(/\/+$/, '')

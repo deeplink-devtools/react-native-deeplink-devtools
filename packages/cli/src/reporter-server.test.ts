@@ -20,7 +20,7 @@ async function startOnFreePort(): Promise<ReporterServer> {
 }
 
 /**
- * Collect server events and let tests await one of a kind — including events
+ * Collect server events and let tests await one of a kind - including events
  * that already arrived (each is consumed at most once).
  */
 function recordEvents(server: ReporterServer): {

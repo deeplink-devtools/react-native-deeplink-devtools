@@ -53,8 +53,8 @@ describe('buildValidateOutput', () => {
   it('reports clean and exits 0 for two valid files', () => {
     const output = buildValidateOutput('example.com', validAasa, validAssetlinks, baseOptions);
     expect(output.exitCode).toBe(0);
-    expect(output.stdout).toContain('apple-app-site-association — clean');
-    expect(output.stdout).toContain('assetlinks.json — clean');
+    expect(output.stdout).toContain('apple-app-site-association - clean');
+    expect(output.stdout).toContain('assetlinks.json - clean');
     expect(output.stdout).toContain('note:'); // CDN caching note
     expect(output.stdout).not.toContain(String.fromCharCode(27));
   });

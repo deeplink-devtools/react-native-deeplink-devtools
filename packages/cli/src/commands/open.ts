@@ -15,7 +15,7 @@ import {
 import { renderDiagnostics, renderNotes, shouldColor } from '../render.js';
 import { resolveAppDir } from './routes.js';
 
-/** What `rndl open` writes and how it exits — pure data, for testability. */
+/** What `rndl open` writes and how it exits - pure data, for testability. */
 export interface OpenOutput {
   stdout: string;
   stderr: string;
@@ -104,7 +104,7 @@ export async function runOpen(
   const skipNotes = outcomes.flatMap((o) => (o.kind === 'skipped' ? [o.note] : []));
 
   const diagnostics = errors.map((o) => o.diagnostic);
-  // Auto mode: nothing opened and nothing failed means no device anywhere — one clear error.
+  // Auto mode: nothing opened and nothing failed means no device anywhere - one clear error.
   if (!strict && opened.length === 0 && errors.length === 0) {
     diagnostics.push({
       severity: 'error',
@@ -176,7 +176,7 @@ async function resolveUrl(
   if (built.url === undefined) {
     const named = built.missing.filter((m) => m !== '*');
     const detail = built.missing.includes('*')
-      ? 'the pattern has an unnamed wildcard segment — pass a full URL instead'
+      ? 'the pattern has an unnamed wildcard segment - pass a full URL instead'
       : `missing required param${named.length === 1 ? '' : 's'}: ${named.join(', ')}`;
     return {
       ok: false,
@@ -257,7 +257,7 @@ export function resolvePrefix(
   if (prefixes.length > 0) {
     if (prefixes.length > 1) {
       notes.push(
-        `config declares ${prefixes.length} prefixes; using ${prefixes[0]} — pass --scheme to choose.`,
+        `config declares ${prefixes.length} prefixes; using ${prefixes[0]} - pass --scheme to choose.`,
       );
     }
     return normalizePrefix(prefixes[0] as string);
@@ -320,7 +320,7 @@ export async function openIos(
         code: 'IOS_OPEN_FAILED',
         message: `simctl openurl failed on ${sim.name}: ${result.stderr.trim() || `exit ${result.exitCode}`}`,
         fix: noApp
-          ? `no app on this simulator handles this URL — install the app (e.g. npx expo run:ios) or open an https:// URL.`
+          ? `no app on this simulator handles this URL - install the app (e.g. npx expo run:ios) or open an https:// URL.`
           : 'check the URL and that the simulator is responsive.',
       },
     };
@@ -389,7 +389,7 @@ function degrade(diagnostic: Diagnostic, strict: boolean, label: string): Platfo
   if (strict) {
     return { kind: 'failed', diagnostic };
   }
-  return { kind: 'skipped', note: `${label}: skipped — ${diagnostic.message}` };
+  return { kind: 'skipped', note: `${label}: skipped - ${diagnostic.message}` };
 }
 
 /** Quote a value for the on-device `sh -c` that `adb shell` invokes (the `'\''` dance). */
@@ -400,7 +400,7 @@ function quoteForDeviceShell(value: string): string {
 /**
  * `rndl open <url | route> [--params k=v] [--platform ios|android|both]
  * [--device <id>] [--scheme <s>] [--app-dir <dir> | --config <module>]
- * [--package <name>]` — open a deep link on a simulator/device.
+ * [--package <name>]` - open a deep link on a simulator/device.
  */
 export function openCommand(): Command {
   return new Command('open')

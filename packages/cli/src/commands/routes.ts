@@ -24,7 +24,7 @@ export function resolveAppDir(cwd: string, appDirFlag?: string): string | undefi
   return undefined;
 }
 
-/** What `rndl routes` writes and how it exits — pure data, for testability. */
+/** What `rndl routes` writes and how it exits - pure data, for testability. */
 export interface RoutesOutput {
   stdout: string;
   stderr: string;
@@ -107,7 +107,7 @@ export async function runRoutesConfig(
 }
 
 /**
- * `rndl routes [--json] [--app-dir <dir> | --config <module[#export]>]` —
+ * `rndl routes [--json] [--app-dir <dir> | --config <module[#export]>]`  -
  * print the app's deep-link route table, extracted from Expo Router file
  * conventions or from a React Navigation linking configuration.
  */

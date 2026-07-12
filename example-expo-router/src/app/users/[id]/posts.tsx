@@ -5,7 +5,7 @@ export default function UserPostsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Posts of user {id} — static child of a dynamic segment</Text>
+      <Text>Posts of user {id} - static child of a dynamic segment</Text>
     </View>
   );
 }

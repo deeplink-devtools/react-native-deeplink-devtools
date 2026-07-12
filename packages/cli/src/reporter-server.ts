@@ -19,7 +19,7 @@ export type ReporterServerEvent =
   | { kind: 'invalid-message'; client: ReporterClient; reason: string };
 
 /**
- * The dev-transport server as the interactive session sees it — an interface
+ * The dev-transport server as the interactive session sees it - an interface
  * so tests can substitute a scripted fake.
  */
 export interface ReporterServer {
@@ -47,7 +47,7 @@ export function describeReporterClient(client: ReporterClient): string {
 /**
  * Start the WebSocket server the in-app reporter connects to. Resolves once
  * the port is bound; rejects (typically `EADDRINUSE`) when it cannot bind.
- * Incoming frames are validated with core's `parseReporterMessage` — a
+ * Incoming frames are validated with core's `parseReporterMessage` - a
  * reporter speaking a different protocol version is surfaced as an
  * `invalid-message` event with an actionable reason, never a crash.
  */
@@ -78,14 +78,14 @@ export function startReporterServer(port: number): Promise<ReporterServer> {
             : data.toString('utf8');
         const message = parseReporterMessage(raw);
         if (message === undefined) {
-          emit({ kind: 'invalid-message', client, reason: 'unparseable frame — not a reporter?' });
+          emit({ kind: 'invalid-message', client, reason: 'unparseable frame - not a reporter?' });
           return;
         }
         if (message.protocolVersion !== REPORTER_PROTOCOL_VERSION) {
           emit({
             kind: 'invalid-message',
             client,
-            reason: `protocol version ${message.protocolVersion} (this rndl speaks ${REPORTER_PROTOCOL_VERSION}) — update rndl and @deeplink-devtools/runtime to matching versions.`,
+            reason: `protocol version ${message.protocolVersion} (this rndl speaks ${REPORTER_PROTOCOL_VERSION}) - update rndl and @deeplink-devtools/runtime to matching versions.`,
           });
           return;
         }

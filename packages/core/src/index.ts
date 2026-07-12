@@ -6,9 +6,9 @@ export type RouteSourceType = 'expo-router' | 'react-navigation';
 /**
  * Where a parameter appears in a deep-link URL.
  *
- * - `path` — a single URL segment, e.g. `:id` in `/users/:id`
- * - `query` — a query-string parameter, e.g. `?ref=...`
- * - `catch-all` — a parameter matching one or more trailing segments, e.g. `*slug`
+ * - `path` - a single URL segment, e.g. `:id` in `/users/:id`
+ * - `query` - a query-string parameter, e.g. `?ref=...`
+ * - `catch-all` - a parameter matching one or more trailing segments, e.g. `*slug`
  */
 export type ParamKind = 'path' | 'query' | 'catch-all';
 

@@ -19,7 +19,7 @@ const SETTLE_AFTER_URL_MS = 500;
 
 /**
  * Debounce after each observed navigation-state change while a URL is
- * pending — coalesces multi-step transitions (nested navigators mount one
+ * pending - coalesces multi-step transitions (nested navigators mount one
  * level at a time) into one report of the final state.
  */
 const SETTLE_AFTER_STATE_CHANGE_MS = 150;
@@ -30,7 +30,7 @@ const SETTLE_AFTER_STATE_CHANGE_MS = 150;
  *
  * `getMatched` is re-read on every render into a ref, so the report emitted
  * after the settle window reflects the router's final state. `stateKey` must
- * change whenever the navigation state does — each change while a URL is
+ * change whenever the navigation state does - each change while a URL is
  * pending restarts a short settle timer, and the report fires when the state
  * stops moving.
  */
@@ -101,7 +101,7 @@ export function useReporterCore(
         }
       });
     } catch {
-      // Linking unavailable (bare test env) — the reporter stays silent.
+      // Linking unavailable (bare test env) - the reporter stays silent.
     }
     try {
       Linking.getInitialURL()

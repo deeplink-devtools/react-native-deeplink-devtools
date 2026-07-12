@@ -4,7 +4,7 @@ import { loadLinkingModule } from './loader.js';
 
 /**
  * Load a React Navigation linking-config module with jiti and build its route
- * table in one step — the entry point `rndl routes --config` uses.
+ * table in one step - the entry point `rndl routes --config` uses.
  *
  * `specifier` is `<module>[#<export>]`, e.g. `src/navigation/linking.ts#linking`;
  * relative paths resolve from `options.cwd` (default: `process.cwd()`).

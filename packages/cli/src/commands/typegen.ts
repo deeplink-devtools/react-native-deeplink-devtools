@@ -63,7 +63,7 @@ export async function buildTypegen(cwd: string, options: TypegenOptions): Promis
 
 /**
  * `rndl typegen --out <file> [--app-dir <dir> | --config <module[#export]>]
- * [--scheme <scheme>] [--watch]` — generate TypeScript deep-link types
+ * [--scheme <scheme>] [--watch]` - generate TypeScript deep-link types
  * (`buildDeepLink` + `useTypedParams`) from the app's route table.
  */
 export function typegenCommand(): Command {

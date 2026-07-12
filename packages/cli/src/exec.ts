@@ -6,7 +6,7 @@ export interface ExecResult {
   stderr: string;
   /** Exit code; `-1` when the process never ran or was killed (missing binary, timeout). */
   exitCode: number;
-  /** `true` when the executable itself was not found (ENOENT) — the toolchain is not installed. */
+  /** `true` when the executable itself was not found (ENOENT) - the toolchain is not installed. */
   notFound: boolean;
 }
 

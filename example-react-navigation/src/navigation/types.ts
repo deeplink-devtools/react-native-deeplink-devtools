@@ -13,7 +13,7 @@ export type HomeTabsParamList = {
   Profile: { id: string };
 };
 
-/** Params of the settings stack — intentionally unreachable via URL. */
+/** Params of the settings stack - intentionally unreachable via URL. */
 export type SettingsStackParamList = {
   Notifications: undefined;
   DevMenu: undefined;

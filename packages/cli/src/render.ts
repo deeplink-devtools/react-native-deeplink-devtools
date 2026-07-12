@@ -58,7 +58,7 @@ function formatPattern(pattern: string, color: boolean): string {
  * Render a route table as an aligned plain-text table for terminals, ending
  * in a summary line: route count, source type, then the adapter-specific
  * `summaryExtras` (e.g. API-route or prefix counts). Pure function of its
- * inputs — no I/O — so it is directly unit-testable.
+ * inputs - no I/O - so it is directly unit-testable.
  */
 export function renderRoutesTable(
   table: RouteTable,

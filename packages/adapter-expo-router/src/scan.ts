@@ -3,8 +3,8 @@ import { join } from 'node:path';
 import type { Diagnostic, Param, Route, RouteTable } from '@deeplink-devtools/core';
 
 /**
- * A `_layout` file discovered during the scan. Layouts are structural — they
- * never appear in the {@link RouteTable} — but their anchoring settings are
+ * A `_layout` file discovered during the scan. Layouts are structural - they
+ * never appear in the {@link RouteTable} - but their anchoring settings are
  * useful metadata for tooling.
  */
 export interface ExpoRouterLayout {
@@ -28,13 +28,13 @@ export interface ExpoRouterScanResult {
   /**
    * Findings produced while scanning. Codes emitted by this adapter:
    *
-   * - `APP_DIR_NOT_FOUND` (error) — the directory does not exist.
-   * - `NO_ROUTES_FOUND` (warn) — the directory exists but holds no route files.
-   * - `UNKNOWN_CONVENTION` (warn) — a file name this adapter does not recognize; the file is skipped, never fatal.
-   * - `MISPLACED_SPECIAL_FILE` (warn) — `+html`/`+native-intent`/`+middleware` outside the app-directory root.
-   * - `PLATFORM_ROUTE_NO_FALLBACK` (warn) — a platform-specific route (`.ios`/`.android`/`.native`/`.web`) with no extensionless sibling; Expo Router refuses to bundle this.
-   * - `PLATFORM_API_ROUTE` (warn) — an API route with a platform extension; Expo Router refuses to bundle this.
-   * - `DUPLICATE_PATTERN` (warn) — two route files resolve to the same URL pattern (usually intentional shared routes across groups; the router disambiguates by navigation context).
+   * - `APP_DIR_NOT_FOUND` (error) - the directory does not exist.
+   * - `NO_ROUTES_FOUND` (warn) - the directory exists but holds no route files.
+   * - `UNKNOWN_CONVENTION` (warn) - a file name this adapter does not recognize; the file is skipped, never fatal.
+   * - `MISPLACED_SPECIAL_FILE` (warn) - `+html`/`+native-intent`/`+middleware` outside the app-directory root.
+   * - `PLATFORM_ROUTE_NO_FALLBACK` (warn) - a platform-specific route (`.ios`/`.android`/`.native`/`.web`) with no extensionless sibling; Expo Router refuses to bundle this.
+   * - `PLATFORM_API_ROUTE` (warn) - an API route with a platform extension; Expo Router refuses to bundle this.
+   * - `DUPLICATE_PATTERN` (warn) - two route files resolve to the same URL pattern (usually intentional shared routes across groups; the router disambiguates by navigation context).
    */
   diagnostics: Diagnostic[];
   /**
@@ -174,7 +174,7 @@ function buildPattern(routeName: string): PatternBuild | undefined {
       continue;
     }
     // A leftover bracket, parenthesis, or plus sign means a convention this
-    // adapter does not understand — the caller reports it and skips the file.
+    // adapter does not understand - the caller reports it and skips the file.
     if (/[[\]()+]/.test(segment)) {
       return undefined;
     }
@@ -194,7 +194,7 @@ function buildPattern(routeName: string): PatternBuild | undefined {
  * Scan an Expo Router app directory (`app/` or `src/app/`) into a normalized
  * {@link RouteTable} plus diagnostics and metadata.
  *
- * The scan is purely file-name based — no user code is imported or executed —
+ * The scan is purely file-name based - no user code is imported or executed  -
  * and never throws on unrecognized conventions; those surface as
  * `UNKNOWN_CONVENTION` warnings instead. Verified against expo-router 57
  * (SDK 57) semantics.
@@ -315,7 +315,7 @@ export function buildRouteTable(appDir: string): ExpoRouterScanResult {
   }
 
   // Same URL pattern from multiple files: legitimate for shared routes across
-  // groups, but worth surfacing — deep links resolve to only one of them.
+  // groups, but worth surfacing - deep links resolve to only one of them.
   const byPattern = new Map<string, Route[]>();
   for (const route of routes) {
     const group = byPattern.get(route.pattern);

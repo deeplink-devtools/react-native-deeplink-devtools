@@ -4,7 +4,7 @@ export type { DeepLinkReporterOptions } from '../types.js';
 
 /**
  * Report every deep link this app receives to a running `rndl interactive`
- * session — Expo Router edition. Call it once from the root layout:
+ * session - Expo Router edition. Call it once from the root layout:
  *
  * ```tsx app/_layout.tsx
  * import { useDeepLinkReporter } from '@deeplink-devtools/runtime/expo-router';

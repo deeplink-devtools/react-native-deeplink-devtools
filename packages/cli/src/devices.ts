@@ -142,7 +142,7 @@ export function pickIosSimulator(
       return selectionError(
         'DEVICE_NOT_FOUND',
         `no available simulator matches '${deviceFlag}'`,
-        `pick one of: ${names.join(', ') || '(none available)'} — or open it in Simulator.app.`,
+        `pick one of: ${names.join(', ') || '(none available)'} - or open it in Simulator.app.`,
       );
     }
     if (match.state !== 'Booted') {
@@ -174,7 +174,7 @@ export function pickIosSimulator(
   return {
     ok: true,
     device: chosen,
-    note: `${booted.length} simulators booted; using ${chosen.name} (most recently booted) — pass --device to choose another.`,
+    note: `${booted.length} simulators booted; using ${chosen.name} (most recently booted) - pass --device to choose another.`,
   };
 }
 
@@ -194,7 +194,7 @@ export function pickAndroidDevice(
       return selectionError(
         'DEVICE_NOT_FOUND',
         `no attached device has serial '${deviceFlag}'`,
-        `attached serials: ${serials.join(', ') || '(none)'} — check adb devices.`,
+        `attached serials: ${serials.join(', ') || '(none)'} - check adb devices.`,
       );
     }
     if (match.state !== 'device') {
@@ -278,7 +278,7 @@ export async function listIosSimulators(exec: ExecFn): Promise<DeviceListing<Ios
 
 /**
  * Set up the `adb reverse` tunnel that lets an app on `serial` reach the dev
- * transport at `localhost:<port>`. Idempotent — re-running for an existing
+ * transport at `localhost:<port>`. Idempotent - re-running for an existing
  * tunnel succeeds.
  */
 export async function ensureAdbReverse(

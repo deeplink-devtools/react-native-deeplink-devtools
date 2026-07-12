@@ -15,7 +15,7 @@
 export const REPORTER_PROTOCOL_VERSION = 1;
 
 /**
- * Default TCP port for the dev transport — `rndl` on a phone keypad.
+ * Default TCP port for the dev transport - `rndl` on a phone keypad.
  * Overridable on both ends (`rndl interactive --port`, `useDeepLinkReporter({ port })`).
  */
 export const DEFAULT_REPORTER_PORT = 7635;
@@ -97,7 +97,7 @@ function parseEvent(value: unknown): DeepLinkReportEvent | undefined {
 /**
  * Parse one raw text frame into a {@link ReporterMessage}.
  *
- * Structural validation only — a message with an unknown `protocolVersion`
+ * Structural validation only - a message with an unknown `protocolVersion`
  * still parses so the receiver can tell "newer peer" apart from garbage.
  * Unknown extra fields are dropped. Never throws; malformed input returns
  * `undefined`.

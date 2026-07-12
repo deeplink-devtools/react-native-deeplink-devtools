@@ -13,7 +13,7 @@ export interface AppConfig {
  * Read the Expo `app.json` next to `cwd` and extract the deep-link scheme and
  * Android package. Best-effort and never throws: a missing or malformed file,
  * or absent fields, yields an empty object. Note that `app.config.js`/`.ts`
- * are not evaluated — only a static `app.json` is read.
+ * are not evaluated - only a static `app.json` is read.
  */
 export function readAppConfig(cwd: string): AppConfig {
   const appJson = join(cwd, 'app.json');
@@ -38,7 +38,7 @@ export function readAppConfig(cwd: string): AppConfig {
 
 /**
  * Like {@link readAppConfig}, but walks up from `startDir` to find the nearest
- * `app.json` — useful when the route source is a nested `--app-dir` (e.g.
+ * `app.json` - useful when the route source is a nested `--app-dir` (e.g.
  * `src/app`) whose Expo config lives one or two directories above it. Returns
  * an empty object if none is found before the filesystem root.
  */

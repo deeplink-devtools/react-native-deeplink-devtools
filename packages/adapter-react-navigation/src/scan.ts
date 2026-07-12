@@ -18,21 +18,21 @@ export interface ReactNavigationScanResult {
   /**
    * Findings produced while scanning. Codes emitted by this adapter:
    *
-   * - `CONFIG_LOAD_FAILED` (error) — the linking module could not be imported (emitted by the loader).
-   * - `CONFIG_EXPORT_NOT_FOUND` (error) — the requested export is missing from the module (emitted by the loader).
-   * - `CONFIG_INVALID_SHAPE` (error) — the value is neither a `LinkingOptions` object nor a bare `{ screens }` config.
-   * - `INVALID_PATH_PATTERN` (error) — a `path` string React Navigation's own parser rejects (it would throw at runtime).
-   * - `ALIAS_WITHOUT_PATH` (error) — `alias` on a screen with no `path`; React Navigation throws on this.
-   * - `DUPLICATE_PATTERN` (error) — two unrelated screens resolve to the same pattern; React Navigation throws on this.
-   * - `NO_SCREENS` (warn) — no `screens` map to scan; URLs would fall back to segment-as-route-name matching.
-   * - `INVALID_SCREEN_CONFIG` (warn) — a screen value is neither string nor object (subtree skipped), or carries unknown keys.
-   * - `NO_PREFIXES` (warn) — LinkingOptions without a `prefixes` array; the app cannot receive deep links.
+   * - `CONFIG_LOAD_FAILED` (error) - the linking module could not be imported (emitted by the loader).
+   * - `CONFIG_EXPORT_NOT_FOUND` (error) - the requested export is missing from the module (emitted by the loader).
+   * - `CONFIG_INVALID_SHAPE` (error) - the value is neither a `LinkingOptions` object nor a bare `{ screens }` config.
+   * - `INVALID_PATH_PATTERN` (error) - a `path` string React Navigation's own parser rejects (it would throw at runtime).
+   * - `ALIAS_WITHOUT_PATH` (error) - `alias` on a screen with no `path`; React Navigation throws on this.
+   * - `DUPLICATE_PATTERN` (error) - two unrelated screens resolve to the same pattern; React Navigation throws on this.
+   * - `NO_SCREENS` (warn) - no `screens` map to scan; URLs would fall back to segment-as-route-name matching.
+   * - `INVALID_SCREEN_CONFIG` (warn) - a screen value is neither string nor object (subtree skipped), or carries unknown keys.
+   * - `NO_PREFIXES` (warn) - LinkingOptions without a `prefixes` array; the app cannot receive deep links.
    */
   diagnostics: Diagnostic[];
   /** URL prefixes declared in `LinkingOptions.prefixes`; empty for a bare config. */
   prefixes: string[];
   /**
-   * Screens reachable only via `navigate()` — no `path` of their own and no
+   * Screens reachable only via `navigate()` - no `path` of their own and no
    * descendant with one. Ancestry-qualified (`Settings/DevMenu`). Not an error:
    * screens are frequently kept out of the URL space on purpose.
    */
@@ -69,7 +69,7 @@ interface PatternPart {
  * Parse a `path` string into segments. This mirrors the state machine in
  * `@react-navigation/core`'s `getPatternParts` (7.21) including its error
  * conditions, because a path that throws there crashes the user's app on the
- * first deep link — we must flag exactly the same inputs.
+ * first deep link - we must flag exactly the same inputs.
  */
 function getPatternParts(path: string): PatternPart[] {
   const parts: PatternPart[] = [];
@@ -215,7 +215,7 @@ interface WalkState {
   patternChains: Map<string, string[][]>;
   /**
    * Static segments from the config's top-level `path`. Prefixed to every
-   * pattern — `exact: true` does not escape it, because `getStateFromPath`
+   * pattern - `exact: true` does not escape it, because `getStateFromPath`
    * strips it from the URL before any matching happens.
    */
   rootSegments: string[];
@@ -292,7 +292,7 @@ function walkScreen(state: WalkState, name: string, config: unknown, parent: Par
         severity: 'error',
         code: 'INVALID_PATH_PATTERN',
         message: `screen '${ancestry.join(' > ')}': ${error instanceof Error ? error.message : String(error)}`,
-        fix: 'fix the path string — React Navigation throws on it when a link arrives.',
+        fix: 'fix the path string - React Navigation throws on it when a link arrives.',
       });
       return;
     }
@@ -332,7 +332,7 @@ function walkScreen(state: WalkState, name: string, config: unknown, parent: Par
         severity: 'error',
         code: 'INVALID_PATH_PATTERN',
         message: `screen '${ancestry.join(' > ')}': ${error instanceof Error ? error.message : String(error)}`,
-        fix: 'fix the path string — React Navigation throws on it when a link arrives.',
+        fix: 'fix the path string - React Navigation throws on it when a link arrives.',
       });
     }
   }
@@ -420,7 +420,7 @@ function walkAlias(
       severity: 'error',
       code: 'INVALID_PATH_PATTERN',
       message: `screen '${ancestry.join(' > ')}' alias '${path}': ${error instanceof Error ? error.message : String(error)}`,
-      fix: 'fix the alias path string — React Navigation throws on it when a link arrives.',
+      fix: 'fix the alias path string - React Navigation throws on it when a link arrives.',
     });
     return;
   }
@@ -430,7 +430,7 @@ function walkAlias(
 
 /**
  * Build a normalized {@link RouteTable} from a React Navigation linking
- * configuration — either a full `LinkingOptions` object (`{ prefixes, config }`)
+ * configuration - either a full `LinkingOptions` object (`{ prefixes, config }`)
  * or a bare config (`{ screens }`). Mirrors the pattern semantics of
  * `@react-navigation/core` 7.x `getStateFromPath`: nested paths concatenate
  * unless `exact: true`, `alias` adds extra incoming patterns, and query params
@@ -479,7 +479,7 @@ export function buildRouteTable(
     config = { screens: {} };
   } else {
     return empty(
-      'the value has neither a `screens` map nor a `config` object — it does not look like a React Navigation linking configuration.',
+      'the value has neither a `screens` map nor a `config` object - it does not look like a React Navigation linking configuration.',
     );
   }
 

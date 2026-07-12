@@ -20,8 +20,8 @@ function normalizeFingerprint(fingerprint: string): string {
 /**
  * Validate a fetched assetlinks.json Digital Asset Links document: HTTPS
  * delivery, JSON array shape, the `handle_all_urls` relation, an `android_app`
- * target, package-name and fingerprint format, and — when `--package` /
- * `--sha256` are supplied — that they are present.
+ * target, package-name and fingerprint format, and - when `--package` /
+ * `--sha256` are supplied - that they are present.
  */
 export function validateAssetlinks(
   doc: FetchedDocument,

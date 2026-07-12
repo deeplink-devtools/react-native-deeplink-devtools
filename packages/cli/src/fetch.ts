@@ -111,7 +111,7 @@ export async function fetchAasa(domain: string): Promise<FetchedDocument> {
   const wellKnown = await fetchWellKnown(
     `https://${domain}/.well-known/apple-app-site-association`,
   );
-  // Fall back to the root path only on a clean 404-style miss — a redirect or
+  // Fall back to the root path only on a clean 404-style miss - a redirect or
   // transport error would recur there, and the well-known result is the honest
   // one to report.
   if (wellKnown.ok || wellKnown.redirected || wellKnown.networkError !== undefined) {

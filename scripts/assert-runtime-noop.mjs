@@ -3,7 +3,7 @@
 // Builds two real production Metro bundles from example-expo-router's
 // context (its metro + @expo/metro-config, already installed via Expo):
 // a baseline entry and one that additionally imports every public entry of
-// the runtime package. The size delta must stay under 1KB — proving Metro's
+// the runtime package. The size delta must stay under 1KB - proving Metro's
 // dead-code elimination drops the __DEV__-gated implementation entirely.
 //
 // Zero dependencies; run from the repo root AFTER `yarn build`:
@@ -46,7 +46,7 @@ async function main() {
     ({ getDefaultConfig } = exampleRequire('@expo/metro-config'));
   } catch (error) {
     console.error(
-      'FAIL could not load metro/@expo/metro-config from example-expo-router —',
+      'FAIL could not load metro/@expo/metro-config from example-expo-router  - ',
       'run `yarn install` first.',
     );
     console.error(String(error));
@@ -74,7 +74,7 @@ async function main() {
 
   if (baseline < MIN_BASELINE_BYTES) {
     console.error(
-      `FAIL baseline bundle is implausibly small (${baseline} bytes < ${MIN_BASELINE_BYTES}) — ` +
+      `FAIL baseline bundle is implausibly small (${baseline} bytes < ${MIN_BASELINE_BYTES}) - ` +
         'the fixture no longer bundles react-native, so the delta proves nothing.',
     );
     process.exit(1);
@@ -85,7 +85,7 @@ async function main() {
   if (delta >= MAX_DELTA_BYTES) {
     console.error(
       `FAIL importing @deeplink-devtools/runtime adds ${delta} bytes to a production bundle ` +
-        `(limit ${MAX_DELTA_BYTES}). The __DEV__ gate is no longer eliminating the implementation — ` +
+        `(limit ${MAX_DELTA_BYTES}). The __DEV__ gate is no longer eliminating the implementation - ` +
         'check that the public entries only reach the implementation via require() inside an if (__DEV__) branch.',
     );
     process.exit(1);
