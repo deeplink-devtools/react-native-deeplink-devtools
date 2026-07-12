@@ -27,7 +27,7 @@ export interface InteractiveOptions {
 }
 
 /**
- * The prompt surface the session drives — a thin slice of `@clack/prompts`
+ * The prompt surface the session drives - a thin slice of `@clack/prompts`
  * so tests can script it.
  */
 export interface PromptsLike {
@@ -82,7 +82,7 @@ export function routeMatches(fired: Route, reported: string): boolean {
 
 /**
  * Render one report against the link that was fired: route match, URL echo,
- * and a param-by-param diff. Pure — unit-tested directly.
+ * and a param-by-param diff. Pure - unit-tested directly.
  */
 export function renderReportComparison(
   fired: FiredLink,
@@ -93,12 +93,12 @@ export function renderReportComparison(
   const lines: string[] = [];
 
   if (event.matchedRoute === null) {
-    lines.push(paint(color, 'red', `route   (nothing matched) ✗ — fired ${fired.route.pattern}`));
+    lines.push(paint(color, 'red', `route   (nothing matched) ✗ - fired ${fired.route.pattern}`));
   } else if (routeMatches(fired.route, event.matchedRoute)) {
     lines.push(`route   ${event.matchedRoute} ✓`);
   } else {
     lines.push(
-      paint(color, 'red', `route   ${event.matchedRoute} ✗ — fired ${fired.route.pattern}`),
+      paint(color, 'red', `route   ${event.matchedRoute} ✗ - fired ${fired.route.pattern}`),
     );
   }
 
@@ -115,7 +115,11 @@ export function renderReportComparison(
       paramLines.push(paint(color, 'red', `  ${name}: fired '${value}' ✗ not reported`));
     } else {
       const got = reported.get(name);
-      const gotText = typeof got === 'string' ? got : JSON.stringify(got);
+      // Expo Router echoes catch-all segments as an array; the link was fired
+      // from one `a/b/c` string, so join before comparing.
+      const kind = fired.route.params.find((param) => param.name === name)?.kind;
+      const normalized = kind === 'catch-all' && Array.isArray(got) ? got.join('/') : got;
+      const gotText = typeof normalized === 'string' ? normalized : JSON.stringify(normalized);
       if (gotText === value) {
         paramLines.push(`  ${name} = ${value} ✓`);
       } else {
@@ -140,8 +144,8 @@ export function renderNoReport(fired: FiredLink, timeoutMs: number, clientCount:
   const head = `fired ${fired.url}, but no report arrived within ${Math.round(timeoutMs / 1000)}s.`;
   const why =
     clientCount === 0
-      ? 'No app is connected — run your app in a development build with useDeepLinkReporter() (see @deeplink-devtools/runtime), then fire again.'
-      : 'An app is connected but stayed silent — did the link reach it? Check that the URL scheme opens this app and that the reporter hook is mounted at the root.';
+      ? 'No app is connected - run your app in a development build with useDeepLinkReporter() (see @deeplink-devtools/runtime), then fire again.'
+      : 'An app is connected but stayed silent - did the link reach it? Check that the URL scheme opens this app and that the reporter hook is mounted at the root.';
   return `${head}\n${why}`;
 }
 
@@ -164,8 +168,8 @@ function errorDiag(code: string, message: string, fix: string): Diagnostic {
 }
 
 /**
- * Run the interactive session loop. Pure of process state — every effect goes
- * through {@link InteractiveDeps} — and returns the exit code.
+ * Run the interactive session loop. Pure of process state - every effect goes
+ * through {@link InteractiveDeps} - and returns the exit code.
  */
 export async function runInteractive(
   cwd: string,
@@ -209,7 +213,7 @@ export async function runInteractive(
         [
           errorDiag(
             'NO_ROUTES',
-            'the route table is empty — nothing to fire',
+            'the route table is empty - nothing to fire',
             'check --app-dir/--config; run `rndl routes` to inspect what rndl sees.',
           ),
         ],
@@ -259,7 +263,7 @@ export async function runInteractive(
 
   try {
     prompts.intro(
-      `rndl interactive — ${routes.length} route${routes.length === 1 ? '' : 's'}, scheme ${prefix}, listening on ws://localhost:${port}`,
+      `rndl interactive - ${routes.length} route${routes.length === 1 ? '' : 's'}, scheme ${prefix}, listening on ws://localhost:${port}`,
     );
     for (const note of schemeNotes) {
       prompts.info(`note: ${note}`);
@@ -325,7 +329,7 @@ export async function runInteractive(
                 ? route.params.map((p) => `${p.name}${p.optional ? '?' : ''}`).join(', ')
                 : route.name,
             ...(hasUnnamedWildcard(route)
-              ? { disabled: true, hint: 'bare * wildcard — use `rndl open <full url>`' }
+              ? { disabled: true, hint: 'bare * wildcard - use `rndl open <full url>`' }
               : {}),
           })),
           { value: 'quit', label: '(quit)' },
@@ -398,7 +402,7 @@ export async function runInteractive(
   }
 }
 
-/** Prompt for each of the route's params — required first, optional skippable. */
+/** Prompt for each of the route's params - required first, optional skippable. */
 async function promptParams(
   route: Route,
   prompts: PromptsLike,
@@ -408,7 +412,7 @@ async function promptParams(
   for (const param of ordered) {
     for (;;) {
       const answer = await prompts.text({
-        message: `${param.name} (${param.tsType}${param.optional ? ', optional — empty to skip' : ''})`,
+        message: `${param.name} (${param.tsType}${param.optional ? ', optional - empty to skip' : ''})`,
         ...(param.kind === 'catch-all' ? { placeholder: 'one/two/three' } : {}),
       });
       if (prompts.isCancel(answer)) {
@@ -549,7 +553,7 @@ function clackPrompts(): PromptsLike {
 
 /**
  * `rndl interactive [--port <n>] [--platform ios|android|both] [--device <id>]
- * [--scheme <s>] [--app-dir <dir> | --config <module>] [--package <name>]` —
+ * [--scheme <s>] [--app-dir <dir> | --config <module>] [--package <name>]`  -
  * pick routes, fire them on devices, and watch what the app matches, live.
  */
 export function interactiveCommand(): Command {

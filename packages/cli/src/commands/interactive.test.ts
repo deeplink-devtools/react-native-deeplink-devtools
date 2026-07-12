@@ -228,7 +228,7 @@ describe('runInteractive', () => {
 
     expect(code).toBe(0);
     const notes = prompts.text_of('note');
-    expect(notes).toContain('route   /+not-found ✗ — fired /users/:id');
+    expect(notes).toContain('route   /+not-found ✗ - fired /users/:id');
     expect(notes).toContain("id: fired '42', app got '43' ✗");
   });
 
@@ -487,6 +487,61 @@ describe('renderReportComparison', () => {
       false,
     );
     expect(text).toContain('id = 42 ✓');
+  });
+
+  it('joins an array-valued catch-all param before comparing (Expo Router echoes arrays)', () => {
+    const firedCatchAll = {
+      route: {
+        name: 'posts/[...slug]',
+        pattern: '/posts/*slug',
+        params: [{ name: 'slug', kind: 'catch-all' as const, optional: false, tsType: 'string[]' }],
+        exact: false,
+      },
+      url: 'myapp://posts/one/two/three',
+      params: { slug: 'one/two/three' },
+    };
+    const text = renderReportComparison(
+      firedCatchAll,
+      {
+        client: iosClient,
+        event: {
+          url: firedCatchAll.url,
+          matchedRoute: '/posts/*slug',
+          params: { slug: ['one', 'two', 'three'] },
+          ts: 1,
+        },
+      },
+      false,
+    );
+    expect(text).toContain('slug = one/two/three ✓');
+    expect(text).not.toContain('✗');
+  });
+
+  it('still flags a catch-all whose joined value differs from what was fired', () => {
+    const firedCatchAll = {
+      route: {
+        name: 'posts/[...slug]',
+        pattern: '/posts/*slug',
+        params: [{ name: 'slug', kind: 'catch-all' as const, optional: false, tsType: 'string[]' }],
+        exact: false,
+      },
+      url: 'myapp://posts/one/two',
+      params: { slug: 'one/two' },
+    };
+    const text = renderReportComparison(
+      firedCatchAll,
+      {
+        client: iosClient,
+        event: {
+          url: firedCatchAll.url,
+          matchedRoute: '/posts/*slug',
+          params: { slug: ['one', 'other'] },
+          ts: 1,
+        },
+      },
+      false,
+    );
+    expect(text).toContain("slug: fired 'one/two', app got 'one/other' ✗");
   });
 });
 
