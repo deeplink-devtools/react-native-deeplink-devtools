@@ -9,6 +9,16 @@ const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 const REGISTRY_BASE = 'https://registry.npmjs.org';
 const IS_WINDOWS = process.platform === 'win32';
 
+// Windows needs a shell to resolve the yarn/npm .cmd shims, but passing an args
+// array together with `shell: true` is deprecated (DEP0190): Node would only
+// concatenate them. All arguments here are static and space-free, so pre-join
+// them into the single command string the shell expects.
+function runCommand(file, args, options) {
+  return IS_WINDOWS
+    ? spawnSync([file, ...args].join(' '), { ...options, shell: true })
+    : spawnSync(file, args, options);
+}
+
 export function parseWorkspacesListOutput(text) {
   const trimmed = text.trim();
   if (trimmed === '') {
@@ -25,10 +35,9 @@ export function parseWorkspacesListOutput(text) {
 }
 
 function listPublishableWorkspaces() {
-  const result = spawnSync('yarn', ['workspaces', 'list', '--no-private', '--json'], {
+  const result = runCommand('yarn', ['workspaces', 'list', '--no-private', '--json'], {
     cwd: ROOT_DIR,
     encoding: 'utf8',
-    shell: IS_WINDOWS,
   });
 
   if (result.error) {
@@ -75,7 +84,7 @@ async function isVersionPublished(name, version) {
       }
       throw new Error(
         `registry returned ${response.status} ${response.statusText} for ${url} ` +
-          '(neither 200 nor 404) — treating as ambiguous, not "unpublished"',
+          '(neither 200 nor 404) - treating as ambiguous, not "unpublished"',
       );
     } catch (error) {
       lastError = error;
@@ -93,10 +102,9 @@ async function isVersionPublished(name, version) {
 }
 
 function runNpmPublishDryRun(cwd) {
-  const result = spawnSync('npm', ['publish', '--dry-run'], {
+  const result = runCommand('npm', ['publish', '--dry-run'], {
     cwd,
     stdio: 'inherit',
-    shell: IS_WINDOWS,
   });
 
   if (result.error) {
@@ -112,7 +120,7 @@ async function main() {
   const workspaces = listPublishableWorkspaces();
 
   if (workspaces.length === 0) {
-    console.log('publish:dry — no publishable (non-private) workspaces found; nothing to do.');
+    console.log('publish:dry - no publishable (non-private) workspaces found; nothing to do.');
     return;
   }
 
@@ -152,12 +160,12 @@ async function main() {
     }
 
     if (published) {
-      console.log(`SKIP     ${name}@${version} — already on npm, nothing new to dry-run.`);
+      console.log(`SKIP     ${name}@${version} - already on npm, nothing new to dry-run.`);
       skipped.push(`${name}@${version}`);
       continue;
     }
 
-    console.log(`DRY-RUN  ${name}@${version} — not on npm yet, running npm publish --dry-run.`);
+    console.log(`DRY-RUN  ${name}@${version} - not on npm yet, running npm publish --dry-run.`);
     const outcome = runNpmPublishDryRun(path.join(ROOT_DIR, workspace.location));
     if (!outcome.ok) {
       failed.push({ name, reason: outcome.reason });
@@ -187,7 +195,7 @@ const isMain =
 if (isMain) {
   main().catch((error) => {
     console.error(
-      `publish:dry — unexpected error: ${error instanceof Error ? (error.stack ?? error.message) : String(error)}`,
+      `publish:dry - unexpected error: ${error instanceof Error ? (error.stack ?? error.message) : String(error)}`,
     );
     process.exitCode = 1;
   });
