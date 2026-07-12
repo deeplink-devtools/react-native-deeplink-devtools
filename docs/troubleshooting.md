@@ -5,6 +5,10 @@ to fix it. Where `rndl validate` catches the problem, the diagnostic code is lis
 it in the output. A few footguns live in your app's native config (entitlements, the manifest);
 `rndl` validates the domain side and the route table, so those are flagged here as manual checks.
 
+Prefer the long-form version? The deep dive
+[Why universal links and Android App Links break](https://vengalath.com/blog/why-universal-links-and-android-app-links-break/)
+walks through the same ten failures with the platform behavior behind each one.
+
 ## 1. The AASA file is behind a redirect
 
 **Symptom:** the link opens Safari, not your app, even though the file looks correct.
