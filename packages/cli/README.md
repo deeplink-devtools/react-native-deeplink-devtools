@@ -12,7 +12,7 @@ npm install --save-dev react-native-deeplink-devtools
 npx react-native-deeplink-devtools routes
 ```
 
-Requires Node >= 20.
+Requires Node >= 22.
 
 ## Commands
 

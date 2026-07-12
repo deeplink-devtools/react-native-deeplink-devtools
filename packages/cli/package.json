@@ -30,7 +30,7 @@
     "dist"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
     "@clack/prompts": "^1.7.0",

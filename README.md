@@ -29,7 +29,7 @@ npm install --save-dev react-native-deeplink-devtools
 npx react-native-deeplink-devtools routes
 ```
 
-Requires Node >= 20. Installed, the binary is `rndl`:
+Requires Node >= 22. Installed, the binary is `rndl`:
 
 ```sh
 rndl routes                          # aligned table of every deep-linkable route

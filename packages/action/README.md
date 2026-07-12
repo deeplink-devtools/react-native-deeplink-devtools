@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - uses: deeplink-devtools/react-native-deeplink-devtools/packages/action@main
         with:
           domain: example.com
@@ -33,7 +33,7 @@ jobs:
           package: com.example.app
 ```
 
-Pin `@main` to a release tag once one is published. Node 20+ must be set up before the step,
+Pin `@main` to a release tag once one is published. Node 22+ must be set up before the step,
 since the action runs the CLI with `npx`.
 
 Leave `domain` empty to run a routes-only check (inspect the route table without fetching any
