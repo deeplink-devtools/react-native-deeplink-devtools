@@ -102,7 +102,8 @@ opening your app directly.
 
 ## A note on caching and propagation
 
-Apple serves AASA through a CDN, so changes can take up to 24 hours to reach devices; use
+Apple serves AASA through a CDN, so changes can take 24 hours or more to reach devices (a
+first-time fetch can take days); use
 `?mode=developer` on the entitlement while testing, and reinstall the app to force a re-fetch.
 Android re-verifies App Links on install and on update. `rndl validate` surfaces the caching note in
 its output and never treats a fresh change as a hard failure.
