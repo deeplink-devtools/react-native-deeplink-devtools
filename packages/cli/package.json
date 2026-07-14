@@ -1,6 +1,6 @@
 {
   "name": "react-native-deeplink-devtools",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "The rndl CLI for React Native deep links: inspect route tables, validate universal links and Android App Links, open links on simulators and devices.",
   "keywords": [
     "react-native",
@@ -34,10 +34,10 @@
   },
   "dependencies": {
     "@clack/prompts": "^1.7.0",
-    "@deeplink-devtools/adapter-expo-router": "^0.0.2",
-    "@deeplink-devtools/adapter-react-navigation": "^0.0.2",
-    "@deeplink-devtools/core": "^0.0.2",
-    "@deeplink-devtools/typegen": "^0.0.2",
+    "@deeplink-devtools/adapter-expo-router": "^0.1.0",
+    "@deeplink-devtools/adapter-react-navigation": "^0.1.0",
+    "@deeplink-devtools/core": "^0.1.0",
+    "@deeplink-devtools/typegen": "^0.1.0",
     "commander": "^15.0.0",
     "ws": "^8.21.0"
   },

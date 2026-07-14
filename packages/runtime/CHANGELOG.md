@@ -1,5 +1,21 @@
 # @deeplink-devtools/runtime
 
+## 0.1.0
+
+### Minor Changes
+
+- 44f54fa: First public beta. The toolkit is feature complete: route inspection for Expo Router and React
+  Navigation, universal link (AASA) and Android App Links validation with a route cross-check,
+  opening links on simulators and devices, interactive live-match debugging with the in-app
+  reporter, typed deep-link generation, and the GitHub Action.
+
+  The CLI now requires Node 22 or newer.
+
+### Patch Changes
+
+- Updated dependencies [44f54fa]
+  - @deeplink-devtools/core@0.1.0
+
 ## 0.0.2
 
 ### Patch Changes

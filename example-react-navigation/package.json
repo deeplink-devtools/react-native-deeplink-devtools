@@ -1,6 +1,6 @@
 {
   "name": "example-react-navigation",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "main": "index.ts",
   "scripts": {
@@ -10,8 +10,8 @@
     "typecheck": "tsc -p tsconfig.typecheck.json"
   },
   "dependencies": {
-    "@deeplink-devtools/core": "^0.0.2",
-    "@deeplink-devtools/runtime": "^0.0.2",
+    "@deeplink-devtools/core": "^0.1.0",
+    "@deeplink-devtools/runtime": "^0.1.0",
     "@react-navigation/bottom-tabs": "^7.18.7",
     "@react-navigation/native": "^7.3.7",
     "@react-navigation/native-stack": "^7.17.9",

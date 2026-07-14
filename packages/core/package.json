@@ -1,6 +1,6 @@
 {
   "name": "@deeplink-devtools/core",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Route-table model, matchers, and validators for React Native deep-link tooling. Pure TypeScript, no React Native dependency.",
   "keywords": [
     "react-native",
