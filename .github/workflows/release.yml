@@ -7,6 +7,9 @@ on:
   push:
     tags:
       - 'v*'
+  # Retry hatch: run from the tag ref in the Actions UI if a publish attempt
+  # fails partway (the publish script skips versions already on the registry).
+  workflow_dispatch:
 
 permissions:
   contents: write # create the GitHub Release
@@ -15,6 +18,9 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # NPM_TOKEN lives in the protected release environment (same setup as the
+    # sibling doctor-ci repo); without this line the job cannot read it.
+    environment: release
     steps:
       - uses: actions/checkout@v4
 
