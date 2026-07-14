@@ -20,6 +20,8 @@ export interface InteractiveOptions {
   scheme?: string;
   appDir?: string;
   config?: string;
+  /** dotenv file backing '@env' imports in the --config module. */
+  dotenv?: string;
   packageName?: string;
   color: boolean;
   /** How long to wait for the app's report after firing. */
@@ -553,8 +555,9 @@ function clackPrompts(): PromptsLike {
 
 /**
  * `rndl interactive [--port <n>] [--platform ios|android|both] [--device <id>]
- * [--scheme <s>] [--app-dir <dir> | --config <module>] [--package <name>]`  -
- * pick routes, fire them on devices, and watch what the app matches, live.
+ * [--scheme <s>] [--app-dir <dir> | --config <module>] [--dotenv [path]]
+ * [--package <name>]` - pick routes, fire them on devices, and watch what the
+ * app matches, live.
  */
 export function interactiveCommand(): Command {
   return new Command('interactive')
@@ -576,6 +579,12 @@ export function interactiveCommand(): Command {
         'React Navigation linking module for route lookup',
       ).conflicts('appDir'),
     )
+    .addOption(
+      new Option(
+        '--dotenv [path]',
+        "dotenv file backing '@env' imports in the --config module (bare flag: .env)",
+      ).preset('.env'),
+    )
     .option('--package <name>', 'Android package to receive the intent')
     .action(
       async (options: {
@@ -585,6 +594,7 @@ export function interactiveCommand(): Command {
         scheme?: string;
         appDir?: string;
         config?: string;
+        dotenv?: string;
         package?: string;
       }) => {
         const color = shouldColor();
@@ -633,6 +643,7 @@ export function interactiveCommand(): Command {
             ...(options.scheme !== undefined ? { scheme: options.scheme } : {}),
             ...(options.appDir !== undefined ? { appDir: options.appDir } : {}),
             ...(options.config !== undefined ? { config: options.config } : {}),
+            ...(options.dotenv !== undefined ? { dotenv: options.dotenv } : {}),
             ...(options.package !== undefined ? { packageName: options.package } : {}),
             color,
           },

@@ -22,12 +22,16 @@ import { scanLinkingModule } from '@deeplink-devtools/adapter-react-navigation';
 
 const { table, diagnostics } = await scanLinkingModule('src/navigation/linking.ts#linking', {
   cwd: process.cwd(),
+  dotenvPath: '.env', // optional: back '@env' imports (react-native-dotenv)
 });
 ```
 
 Keep the linking config in an isolated module that only exports plain data and `parse`/`stringify`
 functions (react-navigation imports are fine as `import type`), so it can run outside the native
-runtime. Full documentation lives at
+runtime. Modules that import from `'@env'` (react-native-dotenv's virtual module, which only
+exists in the Metro/babel build) load when you pass `dotenvPath`: the dotenv file is parsed (no
+variable expansion) and its values are served as the `@env` module. The CLI exposes this as
+`--dotenv [path]`. Full documentation lives at
 [vengalath.com/npm/react-native-deeplink-devtools](https://vengalath.com/npm/react-native-deeplink-devtools/).
 See the [root README](https://github.com/deeplink-devtools/react-native-deeplink-devtools#readme)
 for the full toolkit.

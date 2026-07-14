@@ -31,6 +31,8 @@ export interface OpenOptions {
   scheme?: string;
   appDir?: string;
   config?: string;
+  /** dotenv file backing '@env' imports in the --config module. */
+  dotenv?: string;
   packageName?: string;
   color: boolean;
 }
@@ -209,10 +211,13 @@ export type TableResolution =
 /** Load the route table exactly as `rndl open` does (`--config`, `--app-dir`, or auto-detect). */
 export async function loadTable(
   cwd: string,
-  options: Pick<OpenOptions, 'config' | 'appDir'>,
+  options: Pick<OpenOptions, 'config' | 'appDir' | 'dotenv'>,
 ): Promise<TableResolution> {
   if (options.config !== undefined) {
-    const result = await scanLinkingModule(options.config, { cwd });
+    const result = await scanLinkingModule(options.config, {
+      cwd,
+      ...(options.dotenv !== undefined ? { dotenvPath: options.dotenv } : {}),
+    });
     const errors = result.diagnostics.filter((d) => d.severity === 'error');
     if (errors.length > 0) {
       return { ok: false, diagnostics: errors };
@@ -400,7 +405,8 @@ function quoteForDeviceShell(value: string): string {
 /**
  * `rndl open <url | route> [--params k=v] [--platform ios|android|both]
  * [--device <id>] [--scheme <s>] [--app-dir <dir> | --config <module>]
- * [--package <name>]` - open a deep link on a simulator/device.
+ * [--dotenv [path]] [--package <name>]` - open a deep link on a
+ * simulator/device.
  */
 export function openCommand(): Command {
   return new Command('open')
@@ -423,6 +429,12 @@ export function openCommand(): Command {
         'React Navigation linking module for route lookup',
       ).conflicts('appDir'),
     )
+    .addOption(
+      new Option(
+        '--dotenv [path]',
+        "dotenv file backing '@env' imports in the --config module (bare flag: .env)",
+      ).preset('.env'),
+    )
     .option('--package <name>', 'Android package to receive the intent')
     .action(
       async (
@@ -434,6 +446,7 @@ export function openCommand(): Command {
           scheme?: string;
           appDir?: string;
           config?: string;
+          dotenv?: string;
           package?: string;
         },
       ) => {
@@ -453,6 +466,7 @@ export function openCommand(): Command {
             ...(options.scheme !== undefined ? { scheme: options.scheme } : {}),
             ...(options.appDir !== undefined ? { appDir: options.appDir } : {}),
             ...(options.config !== undefined ? { config: options.config } : {}),
+            ...(options.dotenv !== undefined ? { dotenv: options.dotenv } : {}),
             ...(options.package !== undefined ? { packageName: options.package } : {}),
             color: shouldColor(),
           },

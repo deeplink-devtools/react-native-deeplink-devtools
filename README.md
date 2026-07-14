@@ -54,6 +54,7 @@ rndl routes --json                                  # routes, API routes, layout
 rndl routes --app-dir src/app                        # explicit Expo Router directory
 rndl routes --config src/navigation/linking.ts       # default or `linking` export
 rndl routes --config src/navigation/linking.ts#named # a specific named export
+rndl routes --config src/navigation/linking.ts --dotenv # module imports from '@env'
 ```
 
 For Expo Router it understands every file convention (dynamic segments, catch-alls, groups
@@ -61,7 +62,10 @@ including array syntax, platform-specific variants, `+not-found`, `+api`, `+html
 `+native-intent`, `+middleware`) and warns, never crashes, on conventions it does not recognize.
 For React Navigation it executes the linking module under Node (TypeScript and ESM are handled for
 you), so keep the linking config in an isolated module that only exports plain data and
-`parse`/`stringify` functions. Nested paths, `exact`, `alias`, regex-constrained and optional
+`parse`/`stringify` functions. If the module imports from `'@env'` (react-native-dotenv), pass
+`--dotenv [path]` (default `.env`) and rndl serves the dotenv values as that module; the flag
+exists on every command that accepts `--config` (`routes`, `validate`, `open`, `interactive`,
+`typegen`). Nested paths, `exact`, `alias`, regex-constrained and optional
 params, wildcards, and custom `parse`/`stringify` are all understood; params with a custom `parse`
 are reported as `unknown (custom parse)`.
 

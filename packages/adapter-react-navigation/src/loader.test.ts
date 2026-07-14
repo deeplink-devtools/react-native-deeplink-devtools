@@ -70,3 +70,49 @@ describe('loadLinkingModule', () => {
     expect(diag?.fix).toContain('import type');
   });
 });
+
+describe('loadLinkingModule with a dotenv file', () => {
+  it('backs @env imports with the dotenv values (acceptance)', async () => {
+    const loaded = await loadLinkingModule('env/linking.ts', {
+      cwd: FIXTURES_DIR,
+      dotenvPath: 'env/fixture.env',
+    });
+    expect(loaded.diagnostics).toEqual([]);
+    expect(loaded.value).toMatchObject({
+      prefixes: ['envfixture://', 'https://envfixture.example'],
+    });
+  });
+
+  it('leaves variables missing from the dotenv file undefined (allowUndefined semantics)', async () => {
+    const loaded = await loadLinkingModule('env/linking.ts', {
+      cwd: FIXTURES_DIR,
+      dotenvPath: 'env/fixture.env',
+    });
+    // NOT_SET is absent from fixture.env; the fixture appends it to prefixes
+    // only when defined, so a crash-free 2-entry list proves it came back
+    // undefined instead of throwing.
+    expect((loaded.value as { prefixes: string[] }).prefixes).toHaveLength(2);
+  });
+
+  it('reports DOTENV_NOT_FOUND when the dotenv file is missing', async () => {
+    const loaded = await loadLinkingModule('env/linking.ts', {
+      cwd: FIXTURES_DIR,
+      dotenvPath: 'env/nope.env',
+    });
+    expect(loaded.value).toBeUndefined();
+    const diag = loaded.diagnostics[0];
+    expect(diag?.code).toBe('DOTENV_NOT_FOUND');
+    expect(diag?.message).toContain('nope.env');
+    expect(diag?.fix).toContain('--dotenv');
+  });
+
+  it('suggests --dotenv when the import failure is a missing @env module', async () => {
+    const loaded = await loadLinkingModule('env/linking.ts', { cwd: FIXTURES_DIR });
+    expect(loaded.value).toBeUndefined();
+    const diag = loaded.diagnostics[0];
+    expect(diag?.code).toBe('CONFIG_LOAD_FAILED');
+    expect(diag?.message).toContain("Cannot find module '@env'");
+    expect(diag?.fix).toContain('--dotenv');
+    expect(diag?.fix).toContain('react-native-dotenv');
+  });
+});

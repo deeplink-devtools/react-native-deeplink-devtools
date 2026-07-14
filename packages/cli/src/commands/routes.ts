@@ -83,15 +83,19 @@ export function runRoutes(
 
 /**
  * Load a React Navigation linking module (`<module>[#<export>]`, resolved
- * from `cwd`) and format its route table. Pure aside from the module import
- * itself, so tests can drive it directly.
+ * from `cwd`) and format its route table. `options.dotenv` backs `@env`
+ * imports with a dotenv file. Pure aside from the module import itself, so
+ * tests can drive it directly.
  */
 export async function runRoutesConfig(
   specifier: string,
   cwd: string,
-  options: { json: boolean; color: boolean },
+  options: { json: boolean; color: boolean; dotenv?: string },
 ): Promise<RoutesOutput> {
-  const result = await scanLinkingModule(specifier, { cwd });
+  const result = await scanLinkingModule(specifier, {
+    cwd,
+    ...(options.dotenv !== undefined ? { dotenvPath: options.dotenv } : {}),
+  });
   const summaryExtras: string[] = [];
   if (result.prefixes.length > 0) {
     summaryExtras.push(
@@ -107,9 +111,10 @@ export async function runRoutesConfig(
 }
 
 /**
- * `rndl routes [--json] [--app-dir <dir> | --config <module[#export]>]`  -
- * print the app's deep-link route table, extracted from Expo Router file
- * conventions or from a React Navigation linking configuration.
+ * `rndl routes [--json] [--app-dir <dir> | --config <module[#export]>]
+ * [--dotenv [path]]`  - print the app's deep-link route table, extracted from
+ * Expo Router file conventions or from a React Navigation linking
+ * configuration.
  */
 export function routesCommand(): Command {
   return new Command('routes')
@@ -127,23 +132,32 @@ export function routesCommand(): Command {
         'React Navigation linking module, e.g. src/navigation/linking.ts#linking',
       ).conflicts('appDir'),
     )
-    .action(async (options: { json: boolean; appDir?: string; config?: string }) => {
-      const output =
-        options.config !== undefined
-          ? await runRoutesConfig(options.config, process.cwd(), {
-              json: options.json,
-              color: shouldColor(),
-            })
-          : runRoutes(resolveAppDir(process.cwd(), options.appDir), {
-              json: options.json,
-              color: shouldColor(),
-            });
-      if (output.stdout.length > 0) {
-        console.log(output.stdout);
-      }
-      if (output.stderr.length > 0) {
-        console.error(output.stderr);
-      }
-      process.exitCode = output.exitCode;
-    });
+    .addOption(
+      new Option(
+        '--dotenv [path]',
+        "dotenv file backing '@env' imports in the --config module (bare flag: .env)",
+      ).preset('.env'),
+    )
+    .action(
+      async (options: { json: boolean; appDir?: string; config?: string; dotenv?: string }) => {
+        const output =
+          options.config !== undefined
+            ? await runRoutesConfig(options.config, process.cwd(), {
+                json: options.json,
+                color: shouldColor(),
+                ...(options.dotenv !== undefined ? { dotenv: options.dotenv } : {}),
+              })
+            : runRoutes(resolveAppDir(process.cwd(), options.appDir), {
+                json: options.json,
+                color: shouldColor(),
+              });
+        if (output.stdout.length > 0) {
+          console.log(output.stdout);
+        }
+        if (output.stderr.length > 0) {
+          console.error(output.stderr);
+        }
+        process.exitCode = output.exitCode;
+      },
+    );
 }

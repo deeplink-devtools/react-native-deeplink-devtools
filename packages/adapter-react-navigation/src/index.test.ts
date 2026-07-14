@@ -27,4 +27,14 @@ describe('@deeplink-devtools/adapter-react-navigation', () => {
     expect(result.table.routes.map((r) => r.pattern)).toEqual(['/home']);
     expect(result.table.routes[0]?.sourceFile).toBe('named-export.ts');
   });
+
+  it('scanLinkingModule threads dotenvPath through to the loader', async () => {
+    const result = await scanLinkingModule('env/linking.ts', {
+      cwd: FIXTURES_DIR,
+      dotenvPath: 'env/fixture.env',
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(result.prefixes).toEqual(['envfixture://', 'https://envfixture.example']);
+    expect(result.table.routes.map((r) => r.pattern)).toEqual(['/home']);
+  });
 });

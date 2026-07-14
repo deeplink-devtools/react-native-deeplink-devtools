@@ -126,4 +126,26 @@ describe('runRoutesConfig', () => {
     expect(output.stderr).toContain('CONFIG_LOAD_FAILED');
     expect(output.stderr).toContain('isolated module');
   });
+
+  it('backs @env imports when --dotenv is threaded through', async () => {
+    const output = await runRoutesConfig('env/linking.ts', RNAV_FIXTURES_DIR, {
+      json: false,
+      color: false,
+      dotenv: 'env/fixture.env',
+    });
+    expect(output.exitCode).toBe(0);
+    expect(output.stderr).toBe('');
+    expect(output.stdout).toContain('/home');
+    expect(output.stdout).toContain('2 prefixes');
+  });
+
+  it('exits 1 with the dotenv hint when @env cannot be resolved', async () => {
+    const output = await runRoutesConfig('env/linking.ts', RNAV_FIXTURES_DIR, {
+      json: false,
+      color: false,
+    });
+    expect(output.exitCode).toBe(1);
+    expect(output.stderr).toContain('CONFIG_LOAD_FAILED');
+    expect(output.stderr).toContain('--dotenv');
+  });
 });

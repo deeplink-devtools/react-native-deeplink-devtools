@@ -100,6 +100,19 @@ opening your app directly.
 `adb shell pm get-app-links <package>`.
 **rndl:** not detected (app-side). Check your manifest or `app.json`.
 
+## Bonus tooling footgun: `--config` fails with "Cannot find module '@env'"
+
+**Symptom:** `rndl routes --config src/navigation/linking.ts` exits with
+`CONFIG_LOAD_FAILED: ... Cannot find module '@env'` even though the app builds fine.
+**Cause:** `@env` is react-native-dotenv's virtual module; it only exists inside the Metro/babel
+build, so any tool that runs your linking module under plain Node cannot resolve it.
+**Fix:** pass `--dotenv [path]` (default `.env`): rndl parses the dotenv file and serves its
+values as the `@env` module while loading the config. The flag exists on every command that
+accepts `--config`. Note the parser does no variable expansion; a `$VAR` in the file stays
+literal.
+**rndl:** `CONFIG_LOAD_FAILED` (with a `--dotenv` hint when `@env` is the missing module),
+`DOTENV_NOT_FOUND` when the dotenv file itself is missing.
+
 ## A note on caching and propagation
 
 Apple serves AASA through a CDN, so changes can take 24 hours or more to reach devices (a

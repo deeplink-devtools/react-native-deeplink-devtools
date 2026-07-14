@@ -1,5 +1,6 @@
 import type { ReactNavigationScanResult } from './scan.js';
 import { buildRouteTable } from './scan.js';
+import type { LoadLinkingModuleOptions } from './loader.js';
 import { loadLinkingModule } from './loader.js';
 
 /**
@@ -8,13 +9,15 @@ import { loadLinkingModule } from './loader.js';
  *
  * `specifier` is `<module>[#<export>]`, e.g. `src/navigation/linking.ts#linking`;
  * relative paths resolve from `options.cwd` (default: `process.cwd()`).
+ * `options.dotenvPath` backs `@env` imports (react-native-dotenv) with the
+ * values from a dotenv file while the module loads.
  *
  * Never throws: load and scan failures surface as error diagnostics with an
  * empty table.
  */
 export async function scanLinkingModule(
   specifier: string,
-  options: { cwd?: string } = {},
+  options: LoadLinkingModuleOptions = {},
 ): Promise<ReactNavigationScanResult> {
   const loaded = await loadLinkingModule(specifier, options);
   if (loaded.value === undefined) {
@@ -32,7 +35,11 @@ export async function scanLinkingModule(
 export { buildRouteTable } from './scan.js';
 export type { BuildRouteTableOptions, ReactNavigationScanResult } from './scan.js';
 export { loadLinkingModule, parseConfigSpecifier } from './loader.js';
-export type { LoadedLinkingModule, ParsedConfigSpecifier } from './loader.js';
+export type {
+  LoadedLinkingModule,
+  LoadLinkingModuleOptions,
+  ParsedConfigSpecifier,
+} from './loader.js';
 export type {
   ReactNavigationAlias,
   ReactNavigationLinkingConfig,

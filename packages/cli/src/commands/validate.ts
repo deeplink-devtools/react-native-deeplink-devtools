@@ -106,13 +106,16 @@ function renderReport(result: ValidationResult, color: boolean): string {
 /** Resolve a route table for the cross-check from the CLI flags (or auto-detection). */
 async function resolveTable(
   cwd: string,
-  options: { appDir?: string; config?: string; crossCheck: boolean },
+  options: { appDir?: string; config?: string; dotenv?: string; crossCheck: boolean },
 ): Promise<RouteTable | undefined> {
   if (!options.crossCheck) {
     return undefined;
   }
   if (options.config !== undefined) {
-    const result = await scanLinkingModule(options.config, { cwd });
+    const result = await scanLinkingModule(options.config, {
+      cwd,
+      ...(options.dotenv !== undefined ? { dotenvPath: options.dotenv } : {}),
+    });
     return result.table;
   }
   const appDir = resolveAppDir(cwd, options.appDir);
@@ -124,8 +127,9 @@ async function resolveTable(
 
 /**
  * `rndl validate --domain <domain> [--json | --sarif] [--package <name>]
- * [--sha256 <fp>] [--app-dir <dir> | --config <module>] [--no-cross-check]`  -
- * validate a domain's Apple App Site Association and Android assetlinks.json.
+ * [--sha256 <fp>] [--app-dir <dir> | --config <module>] [--dotenv [path]]
+ * [--no-cross-check]` - validate a domain's Apple App Site Association and
+ * Android assetlinks.json.
  */
 export function validateCommand(toolVersion: string): Command {
   return new Command('validate')
@@ -147,6 +151,12 @@ export function validateCommand(toolVersion: string): Command {
         'React Navigation linking module for the route cross-check',
       ).conflicts('appDir'),
     )
+    .addOption(
+      new Option(
+        '--dotenv [path]',
+        "dotenv file backing '@env' imports in the --config module (bare flag: .env)",
+      ).preset('.env'),
+    )
     .option('--no-cross-check', 'skip matching the route table against AASA components')
     .action(
       async (options: {
@@ -157,12 +167,14 @@ export function validateCommand(toolVersion: string): Command {
         sha256?: string;
         appDir?: string;
         config?: string;
+        dotenv?: string;
         crossCheck: boolean;
       }) => {
         const cwd = process.cwd();
         const table = await resolveTable(cwd, {
           ...(options.appDir !== undefined ? { appDir: options.appDir } : {}),
           ...(options.config !== undefined ? { config: options.config } : {}),
+          ...(options.dotenv !== undefined ? { dotenv: options.dotenv } : {}),
           crossCheck: options.crossCheck,
         });
         const packageName = options.package ?? readAppConfig(cwd).androidPackage;

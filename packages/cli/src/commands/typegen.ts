@@ -11,6 +11,8 @@ import { resolveAppDir } from './routes.js';
 export interface TypegenOptions {
   appDir?: string;
   config?: string;
+  /** dotenv file backing '@env' imports in the --config module. */
+  dotenv?: string;
   scheme?: string;
 }
 
@@ -31,7 +33,11 @@ export interface TypegenResult {
  * it directly.
  */
 export async function buildTypegen(cwd: string, options: TypegenOptions): Promise<TypegenResult> {
-  const resolution = await loadTable(cwd, { appDir: options.appDir, config: options.config });
+  const resolution = await loadTable(cwd, {
+    appDir: options.appDir,
+    config: options.config,
+    dotenv: options.dotenv,
+  });
   if (!resolution.ok) {
     return {
       diagnostics: resolution.diagnostics,
@@ -63,8 +69,9 @@ export async function buildTypegen(cwd: string, options: TypegenOptions): Promis
 
 /**
  * `rndl typegen --out <file> [--app-dir <dir> | --config <module[#export]>]
- * [--scheme <scheme>] [--watch]` - generate TypeScript deep-link types
- * (`buildDeepLink` + `useTypedParams`) from the app's route table.
+ * [--dotenv [path]] [--scheme <scheme>] [--watch]` - generate TypeScript
+ * deep-link types (`buildDeepLink` + `useTypedParams`) from the app's route
+ * table.
  */
 export function typegenCommand(): Command {
   return new Command('typegen')
@@ -83,6 +90,12 @@ export function typegenCommand(): Command {
         '--config <module[#export]>',
         'React Navigation linking module, e.g. src/navigation/linking.ts#linking',
       ).conflicts('appDir'),
+    )
+    .addOption(
+      new Option(
+        '--dotenv [path]',
+        "dotenv file backing '@env' imports in the --config module (bare flag: .env)",
+      ).preset('.env'),
     )
     .option(
       '--scheme <scheme>',

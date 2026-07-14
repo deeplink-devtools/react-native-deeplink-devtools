@@ -25,7 +25,9 @@ rndl typegen --out src/deeplinks.gen.ts # generate typed, tsc-checked deep-link 
 ```
 
 `routes` and `validate` work with both Expo Router (auto-detected `app/` or `src/app/`, or
-`--app-dir`) and React Navigation (`--config <module[#export]>`).
+`--app-dir`) and React Navigation (`--config <module[#export]>`). Linking modules that import
+from `'@env'` (react-native-dotenv) need `--dotenv [path]` (default `.env`), available on every
+command that accepts `--config`.
 
 Full documentation lives at
 [vengalath.com/npm/react-native-deeplink-devtools](https://vengalath.com/npm/react-native-deeplink-devtools/):

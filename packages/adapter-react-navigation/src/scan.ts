@@ -20,6 +20,7 @@ export interface ReactNavigationScanResult {
    *
    * - `CONFIG_LOAD_FAILED` (error) - the linking module could not be imported (emitted by the loader).
    * - `CONFIG_EXPORT_NOT_FOUND` (error) - the requested export is missing from the module (emitted by the loader).
+   * - `DOTENV_NOT_FOUND` (error) - the dotenv file passed via `dotenvPath` does not exist (emitted by the loader).
    * - `CONFIG_INVALID_SHAPE` (error) - the value is neither a `LinkingOptions` object nor a bare `{ screens }` config.
    * - `INVALID_PATH_PATTERN` (error) - a `path` string React Navigation's own parser rejects (it would throw at runtime).
    * - `ALIAS_WITHOUT_PATH` (error) - `alias` on a screen with no `path`; React Navigation throws on this.
