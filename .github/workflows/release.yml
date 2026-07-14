@@ -1,0 +1,52 @@
+name: Release
+
+# Publishes every non-private workspace to npm (with provenance) and creates
+# the GitHub Release when a version tag is pushed. Safe to re-run: the publish
+# script skips versions the registry already has.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write # create the GitHub Release
+  id-token: write # npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Must run before setup-node so its yarn cache detection uses Yarn 4, not the image's Yarn 1.
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          registry-url: https://registry.npmjs.org
+
+      # A stale tag (one that does not match the checked-in CLI version) means
+      # the versions were never bumped; fail before touching the registry.
+      - name: Check tag matches the package version
+        run: |
+          version="$(node -p "require('./packages/cli/package.json').version")"
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "tag ${GITHUB_REF_NAME} does not match react-native-deeplink-devtools@${version}; run 'yarn changeset version' and retag." >&2
+            exit 1
+          fi
+
+      - run: yarn install --immutable
+
+      - run: yarn build
+
+      - name: Publish to npm
+        run: yarn release:publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        run: gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

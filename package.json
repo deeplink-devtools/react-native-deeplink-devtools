@@ -18,6 +18,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "publish:dry": "node scripts/publish-dry.mjs",
+    "release:publish": "node scripts/publish.mjs",
     "assert:runtime-noop": "node scripts/assert-runtime-noop.mjs"
   },
   "devDependencies": {
