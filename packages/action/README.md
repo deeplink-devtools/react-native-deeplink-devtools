@@ -26,15 +26,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: deeplink-devtools/react-native-deeplink-devtools/packages/action@main
+      - uses: deeplink-devtools/react-native-deeplink-devtools/packages/action@v0.1.0
         with:
           domain: example.com
           app-dir: src/app # Expo Router; or use `config:` for React Navigation
           package: com.example.app
 ```
 
-Pin `@main` to a release tag once one is published. Node 22+ must be set up before the step,
-since the action runs the CLI with `npx`.
+Node 22+ must be set up before the step, since the action runs the CLI with `npx`.
 
 Leave `domain` empty to run a routes-only check (inspect the route table without fetching any
 `.well-known` files). Point `app-dir` or `config` at your app to enable the routes scan and the
