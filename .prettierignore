@@ -4,3 +4,5 @@ coverage/
 yarn.lock
 expo-env.d.ts
 *.gen.ts
+# Third-party JSON schema fixture, kept byte-identical to upstream.
+packages/core/src/validate/__fixtures__/sarif-schema-2.1.0.json

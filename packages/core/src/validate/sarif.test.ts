@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { Ajv } from 'ajv';
 import { describe, expect, it } from 'vitest';
 import { toSarif } from './sarif.js';
 import type { ValidationResult } from './types.js';
@@ -73,5 +76,22 @@ describe('toSarif', () => {
 
   it('matches the SARIF snapshot', () => {
     expect(sarif).toMatchSnapshot();
+  });
+
+  // The committed fixture is the official OASIS SARIF 2.1.0 JSON schema
+  // (json.schemastore.org/sarif-2.1.0.json), so this is the machine check that
+  // GitHub code scanning will accept the log, hermetically.
+  it('validates against the official SARIF 2.1.0 JSON schema', () => {
+    const schema = JSON.parse(
+      readFileSync(
+        fileURLToPath(new URL('./__fixtures__/sarif-schema-2.1.0.json', import.meta.url)),
+        'utf8',
+      ),
+    ) as object;
+    const ajv = new Ajv({ strict: false, allErrors: true });
+    const validate = ajv.compile(schema);
+    const valid = validate(sarif);
+    expect(validate.errors ?? []).toEqual([]);
+    expect(valid).toBe(true);
   });
 });
