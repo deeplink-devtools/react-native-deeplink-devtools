@@ -8,7 +8,7 @@ import { ensureAdbReverse, listAndroidDevices, pickAndroidDevice } from '../devi
 import { paint, renderDiagnostics, shouldColor } from '../render.js';
 import type { ReporterClient, ReporterServer } from '../reporter-server.js';
 import { describeReporterClient, startReporterServer } from '../reporter-server.js';
-import { loadTable, openAndroid, openIos, resolvePrefix } from './open.js';
+import { loadTable, openAndroid, openIos, resolvePrefix, schemeNotFoundFix } from './open.js';
 
 /** Inputs to an interactive session, after the CLI has parsed flags. */
 export interface InteractiveOptions {
@@ -234,7 +234,7 @@ export async function runInteractive(
           errorDiag(
             'SCHEME_NOT_FOUND',
             'cannot determine a URL scheme for this app',
-            'pass --scheme <scheme> (e.g. myapp or https://example.com), or add "scheme" to app.json.',
+            schemeNotFoundFix(table.appDir ?? cwd),
           ),
         ],
         color,

@@ -55,3 +55,31 @@ export function findAppConfig(startDir: string): AppConfig {
     dir = parent;
   }
 }
+
+/** Dynamic Expo config file names rndl detects but does not evaluate. */
+const DYNAMIC_CONFIG_FILES = ['app.config.ts', 'app.config.js', 'app.config.mjs', 'app.config.cjs'];
+
+/**
+ * Walk up from `startDir` looking for a dynamic Expo config
+ * (`app.config.ts`/`.js`/`.mjs`/`.cjs`). rndl reads only a static `app.json`,
+ * so a project whose scheme or Android package lives in a dynamic config is
+ * invisible to auto-detection; finding one lets callers point the user at the
+ * real cause instead of failing silently. Returns the file path (forward
+ * slashes) when found, else `undefined`.
+ */
+export function findDynamicConfig(startDir: string): string | undefined {
+  let dir = startDir;
+  for (;;) {
+    for (const name of DYNAMIC_CONFIG_FILES) {
+      const candidate = join(dir, name);
+      if (existsSync(candidate)) {
+        return candidate.replaceAll('\\', '/');
+      }
+    }
+    const parent = dirname(dir);
+    if (parent === dir) {
+      return undefined;
+    }
+    dir = parent;
+  }
+}

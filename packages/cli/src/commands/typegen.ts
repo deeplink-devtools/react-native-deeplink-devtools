@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { Command, Option } from 'commander';
 import type { Diagnostic } from '@deeplink-devtools/core';
 import { generateDeepLinkTypes } from '@deeplink-devtools/typegen';
+import { findDynamicConfig } from '../app-config.js';
 import { renderDiagnostics, renderNotes, shouldColor } from '../render.js';
 import { loadTable, resolvePrefix } from './open.js';
 import { resolveAppDir } from './routes.js';
@@ -52,8 +53,11 @@ export async function buildTypegen(cwd: string, options: TypegenOptions): Promis
   const prefix =
     resolvePrefix({ scheme: options.scheme }, resolution.prefixes, searchDir, notes) ?? '';
   if (prefix === '') {
+    const dynamicConfig = findDynamicConfig(searchDir);
     notes.push(
-      'no scheme found (app.json or config prefixes); buildDeepLink returns path-only URLs. Pass --scheme to set one.',
+      dynamicConfig !== undefined
+        ? `no scheme found: rndl reads a static app.json but found ${dynamicConfig}, a dynamic Expo config it does not evaluate. buildDeepLink returns path-only URLs; pass --scheme to set one.`
+        : 'no scheme found (app.json or config prefixes); buildDeepLink returns path-only URLs. Pass --scheme to set one.',
     );
   }
   const content = generateDeepLinkTypes(resolution.table, { defaultPrefix: prefix });

@@ -1,7 +1,20 @@
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import type { ExecFn, ExecResult } from '../exec.js';
-import { runOpen, type OpenOptions } from './open.js';
+import { runOpen, schemeNotFoundFix, type OpenOptions } from './open.js';
+
+// Temp dir for the schemeNotFoundFix tests, cleaned up after each test.
+let dir: string | undefined;
+
+afterEach(() => {
+  if (dir !== undefined) {
+    rmSync(dir, { recursive: true, force: true });
+    dir = undefined;
+  }
+});
 
 const EXPO_APP_DIR = fileURLToPath(
   new URL('../../../../example-expo-router/src/app', import.meta.url),
@@ -269,5 +282,24 @@ describe('runOpen: route mode', () => {
       file: 'xcrun',
       args: ['simctl', 'openurl', 'SIM-UDID', 'https://example.com/users/7'],
     });
+  });
+});
+
+describe('schemeNotFoundFix', () => {
+  it('names a dynamic Expo config when one is present', () => {
+    dir = mkdtempSync(join(tmpdir(), 'rndl-scheme-'));
+    writeFileSync(join(dir, 'app.config.ts'), 'export default {};');
+    const fix = schemeNotFoundFix(dir);
+    expect(fix).toContain('app.config.ts');
+    expect(fix).toContain('does not evaluate');
+    expect(fix).toContain('--scheme');
+  });
+
+  it('gives the plain guidance when no dynamic config exists', () => {
+    dir = mkdtempSync(join(tmpdir(), 'rndl-scheme-'));
+    const fix = schemeNotFoundFix(dir);
+    expect(fix).toBe(
+      'pass --scheme <scheme> (e.g. myapp or https://example.com), or add "scheme" to app.json.',
+    );
   });
 });

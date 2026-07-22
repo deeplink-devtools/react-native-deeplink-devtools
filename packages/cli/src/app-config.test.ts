@@ -1,8 +1,8 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { readAppConfig } from './app-config.js';
+import { findDynamicConfig, readAppConfig } from './app-config.js';
 
 let dir: string | undefined;
 
@@ -39,5 +39,26 @@ describe('readAppConfig', () => {
   it('returns an empty object for malformed JSON', () => {
     const cwd = withAppJson('{ not json');
     expect(readAppConfig(cwd)).toEqual({});
+  });
+});
+
+describe('findDynamicConfig', () => {
+  it('finds an app.config.ts in the start directory', () => {
+    dir = mkdtempSync(join(tmpdir(), 'rndl-dyncfg-'));
+    writeFileSync(join(dir, 'app.config.ts'), 'export default {};');
+    expect(findDynamicConfig(dir)).toBe(join(dir, 'app.config.ts').replaceAll('\\', '/'));
+  });
+
+  it('walks up from a nested app dir to a parent app.config.js', () => {
+    dir = mkdtempSync(join(tmpdir(), 'rndl-dyncfg-'));
+    writeFileSync(join(dir, 'app.config.js'), 'module.exports = {};');
+    const nested = join(dir, 'src', 'app');
+    mkdirSync(nested, { recursive: true });
+    expect(findDynamicConfig(nested)).toBe(join(dir, 'app.config.js').replaceAll('\\', '/'));
+  });
+
+  it('returns undefined when no dynamic config exists', () => {
+    dir = mkdtempSync(join(tmpdir(), 'rndl-dyncfg-'));
+    expect(findDynamicConfig(dir)).toBeUndefined();
   });
 });

@@ -3,7 +3,7 @@ import type { Diagnostic, Route, RouteTable } from '@deeplink-devtools/core';
 import { buildRouteUrl, normalizePrefix } from '@deeplink-devtools/core';
 import { buildRouteTable } from '@deeplink-devtools/adapter-expo-router';
 import { scanLinkingModule } from '@deeplink-devtools/adapter-react-navigation';
-import { findAppConfig } from '../app-config.js';
+import { findAppConfig, findDynamicConfig } from '../app-config.js';
 import type { ExecFn } from '../exec.js';
 import { systemExec } from '../exec.js';
 import {
@@ -168,7 +168,7 @@ async function resolveUrl(
           severity: 'error',
           code: 'SCHEME_NOT_FOUND',
           message: `cannot determine a URL scheme for route ${route.pattern}`,
-          fix: 'pass --scheme <scheme> (e.g. myapp or https://example.com), or add "scheme" to app.json.',
+          fix: schemeNotFoundFix(table.appDir ?? cwd),
         },
       ],
     };
@@ -269,6 +269,20 @@ export function resolvePrefix(
   }
   const scheme = findAppConfig(searchDir).scheme;
   return scheme !== undefined ? normalizePrefix(scheme) : undefined;
+}
+
+/**
+ * The `fix` text for a missing scheme. When a dynamic Expo config
+ * (`app.config.ts`/`.js`) sits near the app, rndl does not evaluate it, which
+ * is the usual reason a scheme cannot be found even though the app declares
+ * one; call that out so the user is not left guessing.
+ */
+export function schemeNotFoundFix(searchDir: string): string {
+  const dynamic = findDynamicConfig(searchDir);
+  if (dynamic !== undefined) {
+    return `rndl reads a static app.json but found ${dynamic}, a dynamic Expo config it does not evaluate. Pass --scheme <scheme> (e.g. myapp or https://example.com), or add "scheme" to an app.json.`;
+  }
+  return 'pass --scheme <scheme> (e.g. myapp or https://example.com), or add "scheme" to app.json.';
 }
 
 /** Normalize a route-name target so `users/x` also matches the `/users/x` pattern. */
