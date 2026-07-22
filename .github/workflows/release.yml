@@ -3,6 +3,10 @@ name: Release
 # Publishes every non-private workspace to npm (with provenance) and creates
 # the GitHub Release when a version tag is pushed. Safe to re-run: the publish
 # script skips versions the registry already has.
+#
+# Publishing authenticates with npm trusted publishing (OIDC), not a token:
+# each package's settings on npmjs.com name this repo, this workflow file, and
+# the release environment as the trusted publisher. No NPM_TOKEN is read.
 on:
   push:
     tags:
@@ -13,13 +17,13 @@ on:
 
 permissions:
   contents: write # create the GitHub Release
-  id-token: write # npm provenance
+  id-token: write # npm trusted publishing (OIDC) and provenance
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    # NPM_TOKEN lives in the protected release environment (same setup as the
-    # sibling doctor-ci repo); without this line the job cannot read it.
+    # The per-package trusted-publisher config on npmjs.com pins this
+    # environment name; keep the two in sync or the OIDC exchange is refused.
     environment: release
     steps:
       - uses: actions/checkout@v4
@@ -27,11 +31,20 @@ jobs:
       # Must run before setup-node so its yarn cache detection uses Yarn 4, not the image's Yarn 1.
       - run: corepack enable
 
+      # No registry-url input here: it writes an .npmrc _authToken line that
+      # pre-empts the OIDC exchange even when the token env var is unset
+      # (actions/setup-node#1551).
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: yarn
-          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm >= 11.5.1; the runner image's bundled npm
+      # can lag behind, so upgrade explicitly and print the version used.
+      - name: Update npm (trusted publishing needs >= 11.5.1)
+        run: |
+          npm install -g npm@latest
+          npm --version
 
       # A stale tag (one that does not match the checked-in CLI version) means
       # the versions were never bumped; fail before touching the registry.
@@ -49,8 +62,6 @@ jobs:
 
       - name: Publish to npm
         run: yarn release:publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
         run: gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --generate-notes
