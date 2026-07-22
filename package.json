@@ -22,11 +22,14 @@
     "assert:runtime-noop": "node scripts/assert-runtime-noop.mjs"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@changesets/cli": "^2.31.0",
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.1.0",
+    "ajv": "^8.20.0",
     "eslint": "^10.6.0",
     "prettier": "^3.9.4",
+    "publint": "^0.3.21",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.62.1",

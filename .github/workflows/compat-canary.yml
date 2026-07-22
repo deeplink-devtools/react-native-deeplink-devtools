@@ -1,0 +1,57 @@
+name: Compat canary
+
+# Weekly drift check. The adapters' whole value is tracking router internals,
+# so once a week the example apps' routers are bumped to their latest releases
+# and the adapter test suites (golden snapshots included) run against them.
+# A failure means upstream changed a convention or linking semantic; the run
+# opens an issue so it is investigated instead of discovered by a user.
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Must run before setup-node so its yarn cache detection uses Yarn 4, not the image's Yarn 1.
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+
+      - run: yarn install --immutable
+
+      - name: Upgrade the example apps' routers to latest
+        run: |
+          yarn workspace example-expo-router add expo-router@latest
+          yarn workspace example-react-navigation add @react-navigation/native@latest @react-navigation/bottom-tabs@latest @react-navigation/native-stack@latest
+          echo "expo-router: $(node -p "require('./example-expo-router/node_modules/expo-router/package.json').version")"
+          echo "react-navigation: $(node -p "require('./example-react-navigation/node_modules/@react-navigation/native/package.json').version")"
+
+      - run: yarn build
+
+      - name: Adapter tests against the latest routers
+        run: yarn vitest run packages/adapter-expo-router/src packages/adapter-react-navigation/src
+
+      - name: Open an issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing="$(gh issue list --state open --search '"RN compat canary" in:title' --json number --jq 'length')"
+          if [ "$existing" = "0" ]; then
+            gh issue create \
+              --title "RN compat canary failed ($(date -u +%Y-%m-%d))" \
+              --body "The weekly compatibility canary failed: the adapter test suites no longer pass against the latest expo-router or @react-navigation releases. An upstream convention or linking semantic likely changed. See the failed run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          else
+            echo "an open canary issue already exists; not filing another."
+          fi

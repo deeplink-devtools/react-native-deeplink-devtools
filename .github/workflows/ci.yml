@@ -40,4 +40,18 @@ jobs:
       # Two production Metro builds proving @deeplink-devtools/runtime adds <1KB to app bundles.
       - run: yarn assert:runtime-noop
 
+      # Published-surface checks: package.json exports and packed files
+      # (publint), and resolution of the published types under every
+      # moduleResolution mode (attw). Run per package from the root via npx:
+      # publint/attw are root devDeps and are not on a workspace's own exec PATH
+      # (Yarn 4). The CLI is bin-only and intentionally ships no types, so it
+      # gets publint but not attw.
+      - name: Lint the published package surface
+        run: |
+          for p in core adapter-expo-router adapter-react-navigation runtime typegen; do
+            npx publint "packages/$p"
+            npx attw --pack "packages/$p"
+          done
+          npx publint packages/cli
+
       - run: yarn publish:dry
