@@ -3,35 +3,55 @@ import type { FetchedDocument } from '@deeplink-devtools/core';
 /** Default body-size cap: Apple's 128KB AASA limit plus a little slack to detect overflow. */
 const DEFAULT_MAX_BYTES = 256 * 1024;
 
+/** Default whole-request deadline; a stalling server must not hang `rndl validate` (or CI). */
+const DEFAULT_TIMEOUT_MS = 10_000;
+
+/** Human message for a fetch failure; abort-by-deadline gets an actionable text. */
+function describeNetworkError(error: unknown, timeoutMs: number): string {
+  const isTimeout = (value: unknown): boolean =>
+    value instanceof Error && (value.name === 'TimeoutError' || value.name === 'AbortError');
+  if (isTimeout(error) || (error instanceof Error && isTimeout(error.cause))) {
+    return `the server did not respond within ${Math.round(timeoutMs / 1000)}s`;
+  }
+  return error instanceof Error ? error.message : String(error);
+}
+
 /**
  * Fetch a single URL into a {@link FetchedDocument}, without following
- * redirects (so the AASA no-redirect rule can be enforced) and capping the
- * body so a hostile or misconfigured server cannot exhaust memory. Never
+ * redirects (so the AASA no-redirect rule can be enforced), capping the
+ * body so a hostile or misconfigured server cannot exhaust memory, and
+ * aborting after `timeoutMs` so a stalling server cannot hang the run. Never
  * throws: transport failures are captured in `networkError`.
  */
 export async function fetchWellKnown(
   url: string,
-  opts: { maxBytes?: number } = {},
+  opts: { maxBytes?: number; timeoutMs?: number } = {},
 ): Promise<FetchedDocument> {
   const maxBytes = opts.maxBytes ?? DEFAULT_MAX_BYTES;
+  const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const scheme = safeScheme(url);
+  const failure = (error: unknown): FetchedDocument => ({
+    requestedUrl: url,
+    finalUrl: url,
+    scheme,
+    ok: false,
+    status: 0,
+    redirected: false,
+    byteLength: 0,
+    truncated: false,
+    body: '',
+    networkError: describeNetworkError(error, timeoutMs),
+  });
 
   let response: Response;
   try {
-    response = await fetch(url, { redirect: 'manual', headers: { accept: 'application/json' } });
+    response = await fetch(url, {
+      redirect: 'manual',
+      headers: { accept: 'application/json' },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
   } catch (error) {
-    return {
-      requestedUrl: url,
-      finalUrl: url,
-      scheme,
-      ok: false,
-      status: 0,
-      redirected: false,
-      byteLength: 0,
-      truncated: false,
-      body: '',
-      networkError: error instanceof Error ? error.message : String(error),
-    };
+    return failure(error);
   }
 
   const redirected = response.status >= 300 && response.status < 400;
@@ -39,7 +59,16 @@ export async function fetchWellKnown(
   const contentType = response.headers.get('content-type')?.split(';')[0]?.trim().toLowerCase();
   const finalUrl = response.url !== '' ? response.url : url;
 
-  const { body, byteLength, truncated } = await readCappedBody(response, maxBytes);
+  // The deadline also covers the body: a server that sends headers and then
+  // stalls mid-stream aborts the read, which must surface as a network error,
+  // not an exception.
+  let read: { body: string; byteLength: number; truncated: boolean };
+  try {
+    read = await readCappedBody(response, maxBytes);
+  } catch (error) {
+    return failure(error);
+  }
+  const { body, byteLength, truncated } = read;
 
   return {
     requestedUrl: url,

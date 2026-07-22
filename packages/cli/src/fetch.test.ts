@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { createServer, type Server } from 'node:http';
+import type { Socket } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { fetchWellKnown, normalizeDomain } from './fetch.js';
 
@@ -8,9 +9,16 @@ type Handler = (req: IncomingMessage, res: ServerResponse) => void;
 let handler: Handler = (_req, res) => res.end();
 let server: Server;
 let baseUrl: string;
+// The timeout tests leave connections deliberately un-ended; track and destroy
+// them so server.close() cannot hang the suite.
+const sockets = new Set<Socket>();
 
 beforeAll(async () => {
   server = createServer((req, res) => handler(req, res));
+  server.on('connection', (socket) => {
+    sockets.add(socket);
+    socket.on('close', () => sockets.delete(socket));
+  });
   await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
   const address = server.address();
   if (address === null || typeof address === 'string') {
@@ -20,6 +28,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  for (const socket of sockets) {
+    socket.destroy();
+  }
   await new Promise<void>((resolve, reject) =>
     server.close((err) => (err ? reject(err) : resolve())),
   );
@@ -86,5 +97,26 @@ describe('fetchWellKnown', () => {
     const doc = await fetchWellKnown(`${baseUrl}/missing`);
     expect(doc.ok).toBe(false);
     expect(doc.status).toBe(404);
+  });
+
+  it('times out a server that never sends a response', async () => {
+    handler = () => {
+      // Accept the request and go silent: no headers, no body, no end.
+    };
+    const doc = await fetchWellKnown(`${baseUrl}/stall`, { timeoutMs: 300 });
+    expect(doc.ok).toBe(false);
+    expect(doc.status).toBe(0);
+    expect(doc.networkError).toContain('did not respond within');
+  });
+
+  it('times out a body that stalls mid-stream', async () => {
+    handler = (_req, res) => {
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.write('{"applinks":');
+      // Never end: the deadline must abort the body read, not throw.
+    };
+    const doc = await fetchWellKnown(`${baseUrl}/stall-body`, { timeoutMs: 300 });
+    expect(doc.ok).toBe(false);
+    expect(doc.networkError).toContain('did not respond within');
   });
 });
