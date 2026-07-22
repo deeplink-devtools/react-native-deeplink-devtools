@@ -118,7 +118,7 @@ export function validateAasa(doc: FetchedDocument, opts: ValidateAasaOptions = {
   report.parsed = file;
 
   notes.push(
-    'production devices fetch the AASA from Apple’s CDN (app-site-association.cdn-apple.com); changes can take 24 hours or more to propagate (a first-time fetch can take days), or add `?mode=developer` to the associated-domains entitlement to bypass the CDN during development.',
+    'production devices fetch the AASA from the Apple CDN (app-site-association.cdn-apple.com); changes can take 24 hours or more to propagate (a first-time fetch can take days), or add `?mode=developer` to the associated-domains entitlement to bypass the CDN during development.',
   );
 
   if (typeof file.applinks !== 'object' || file.applinks === null) {
