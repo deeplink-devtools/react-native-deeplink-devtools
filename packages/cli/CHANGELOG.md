@@ -1,5 +1,13 @@
 # react-native-deeplink-devtools
 
+## 0.1.1
+
+### Patch Changes
+
+- 199aca1: `open`, `interactive`, and `typegen` now explain when a dynamic Expo config (`app.config.ts`/`.js`) is why a scheme or Android package cannot be found, instead of failing silently. `validate`'s well-known fetches now time out instead of hanging when a server is unresponsive. Fixed a stray smart-quote character in the AASA CDN caching note.
+- Updated dependencies [199aca1]
+  - @deeplink-devtools/core@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

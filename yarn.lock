@@ -1149,7 +1149,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@deeplink-devtools/core@npm:^0.1.0, @deeplink-devtools/core@workspace:packages/core":
+"@deeplink-devtools/core@npm:^0.1.0, @deeplink-devtools/core@npm:^0.1.1, @deeplink-devtools/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@deeplink-devtools/core@workspace:packages/core"
   languageName: unknown
@@ -7742,7 +7742,7 @@ __metadata:
     "@clack/prompts": "npm:^1.7.0"
     "@deeplink-devtools/adapter-expo-router": "npm:^0.1.0"
     "@deeplink-devtools/adapter-react-navigation": "npm:^0.1.0"
-    "@deeplink-devtools/core": "npm:^0.1.0"
+    "@deeplink-devtools/core": "npm:^0.1.1"
     "@deeplink-devtools/typegen": "npm:^0.1.0"
     "@types/ws": "npm:^8.18.1"
     commander: "npm:^15.0.0"
