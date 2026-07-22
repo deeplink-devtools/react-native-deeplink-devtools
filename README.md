@@ -183,7 +183,7 @@ own; `react`, `react-native`, and `expo-router` are peer dependencies (the last 
 | Platforms    | iOS (simulator via `simctl`) and Android (device/emulator via `adb`) |
 | Routers      | Expo Router and React Navigation 7+                                  |
 | Expo         | Expo-compatible; example apps are Expo dev-client apps               |
-| Node (CLI)   | >= 20                                                                |
+| Node (CLI)   | >= 22                                                                |
 
 ## Compared to the alternatives
 

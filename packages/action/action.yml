@@ -32,9 +32,9 @@ inputs:
     required: false
     default: '.'
   version:
-    description: 'Version of react-native-deeplink-devtools to run via npx.'
+    description: 'Version of react-native-deeplink-devtools to run via npx. Defaults to the CLI version this copy of the action was released with, for reproducible runs.'
     required: false
-    default: 'latest'
+    default: '0.1.0'
   cli-command:
     description: 'Advanced: override the rndl invocation (e.g. a local build path). Defaults to npx of the pinned version.'
     required: false
